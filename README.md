@@ -25,7 +25,25 @@ My shell/editor config managed with Nix. Works on macOS, Ubuntu, and Arch.
 
 Everything installs automatically and syncs across machines.
 
-## First time setup
+## Quick Setup (One Command)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/IslamTayeb/dotfiles/main/bootstrap.sh | bash
+```
+
+That's it! The script will:
+
+- Install Nix (if needed)
+- Enable flakes
+- Clone your dotfiles
+- Auto-detect your system (macOS/Linux, x86_64/aarch64)
+- Guide you through configuration
+- Install everything
+
+## Manual Setup (if you prefer)
+
+<details>
+<summary>Click to expand manual instructions</summary>
 
 ```bash
 # Install Nix
@@ -36,14 +54,16 @@ mkdir -p ~/.config/nix
 echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
 
 # Clone and setup
-git clone <your-repo> ~/.config/nix-config
+git clone https://github.com/IslamTayeb/dotfiles.git ~/.config/nix-config
 cd ~/.config/nix-config
 
-# Edit flake.nix - change username
-# Edit home.nix - change git config
-
+# Add your machine to flake.nix homeConfigurations
+# Then:
+chmod +x scripts/*.sh
 ./scripts/install.sh
 ```
+
+</details>
 
 Shell reloads automatically. Open nvim once to finish plugin setup.
 
@@ -58,65 +78,48 @@ Add packages: edit `home.packages` in `home.nix`, run `./scripts/update.sh`
 
 Rollback: `home-manager generations` then `home-manager switch --rollback`
 
-## New machine setup
+## New Machine Setup
 
-### 1. Install Nix
-
-```bash
-sh <(curl -L https://nixos.org/nix/install)
-```
-
-### 2. Enable flakes
+### One-Line Install
 
 ```bash
-mkdir -p ~/.config/nix
-echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
+curl -fsSL https://raw.githubusercontent.com/IslamTayeb/dotfiles/main/bootstrap.sh | bash
 ```
 
-### 3. Clone your dotfiles
+### What it does
 
-```bash
-git clone https://github.com/IslamTayeb/dotfiles.git ~/.config/nix-config
-cd ~/.config/nix-config
-```
+1. Installs Nix (if not present)
+2. Enables flakes
+3. Clones your dotfiles to `~/.config/nix-config`
+4. Auto-detects system (macOS/Linux, architecture)
+5. Prompts you to add your machine to `flake.nix` (if new)
+6. Runs installation
 
-### 4. Update for this machine
+### After Installation
 
-Edit `flake.nix` and add your machine's config:
-
-```nix
-homeConfigurations = {
-  "islamtayeb@Islams-MacBook-Pro" = mkHomeConfig "aarch64-darwin" "islamtayeb" [ ];
-  "your-username@new-machine" = mkHomeConfig "aarch64-darwin" "your-username" [ ];  # Add this
-};
-```
-
-### 5. Run installation
-
-```bash
-chmod +x scripts/*.sh
-./scripts/install.sh
-```
-
-### 6. (Optional) Setup auto-commit
-
-If this is your main machine where you edit configs:
-
-```bash
-./scripts/setup-cron.sh
-```
-
-This auto-commits changes every 30 min so other machines can pull updates.
-
-### 7. Pull updates from other machines
-
-Whenever you want to sync configs from your main machine:
+**On your main editing machine:**
 
 ```bash
 cd ~/.config/nix-config
-git pull
-./scripts/update.sh
+./scripts/setup-cron.sh  # Auto-commits changes every 30 min
 ```
+
+**On secondary machines (to get updates):**
+
+```bash
+cd ~/.config/nix-config
+git pull && ./scripts/update.sh
+```
+
+### Ubuntu/Debian Servers
+
+Same one-liner works! The bootstrap script auto-detects Linux and uses multi-user installation:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/IslamTayeb/dotfiles/main/bootstrap.sh | bash
+```
+
+macOS-specific tools (yabai, skhd, karabiner) are automatically skipped on Linux.
 
 ## Directory Structure
 
