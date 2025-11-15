@@ -1,0 +1,48 @@
+# Nix build results
+result
+result-*
+
+# Backup files
+*.bak
+*~
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/*.log
+
+# Sensitive configs (credentials, tokens, etc.)
+configs/gcloud/
+configs/gh-copilot/
+configs/github-copilot/
+configs/op/
+configs/configstore/
+
+# Potentially sensitive files within configs
+**/*credentials*
+**/*secrets*
+**/*token*
+**/*password*
+**/*.key
+**/*.pem
+**/*.p12
+**/*.pfx
+
+# Config-specific sensitive files
+configs/gh/hosts.yml
+configs/karabiner/automatic_backups/
+
+# Large downloaded files/caches (should not be tracked)
+configs/raycast/extensions/
+configs/raycast/public-extensions-fork/
+configs/iterm2/AppSupport/
+configs/iterm2/*.bak
+configs/nvim/lazy-lock.json
+configs/nvim/.git/

@@ -4,12 +4,23 @@ My shell/editor config managed with Nix. Works on macOS, Ubuntu, and Arch.
 
 ## What's in here
 
-- zsh with oh-my-zsh and powerlevel10k
-- tmux with my usual plugins
-- nvim (LazyVim setup)
-- LSPs, formatters, modern CLI tools (fzf, ripgrep, etc.)
+**Development Tools:**
+- **Neovim** (LazyVim setup) - Full IDE experience
+- **Zsh** with oh-my-zsh and powerlevel10k - Beautiful shell
+- **Tmux** - Terminal multiplexer with plugins
+- **LSPs & Formatters** - lua, nix, bash, typescript, python, rust, go
+- **Modern CLI Tools** - fzf, ripgrep, zoxide, bat, eza, btop
 
-Everything installs automatically. No manual setup needed.
+**macOS Window Management:**
+- **Yabai** - Tiling window manager
+- **SKHD** - Hotkey daemon
+- **Sketchybar** - Custom menu bar
+- **Karabiner** - Keyboard customization
+
+**Other Tools:**
+- gh, mise, neofetch, zed, rstudio, wireshark, linearmouse
+
+Everything installs automatically and syncs across machines.
 
 ## First time setup
 
@@ -28,7 +39,7 @@ cd ~/.config/nix-config
 # Edit flake.nix - change username
 # Edit home.nix - change git config
 
-./install.sh
+./scripts/install.sh
 ```
 
 Shell reloads automatically. Open nvim once to finish plugin setup.
@@ -36,11 +47,11 @@ Shell reloads automatically. Open nvim once to finish plugin setup.
 ## Usage
 
 ```bash
-./update.sh              # update everything
-./setup-cron.sh          # auto-sync every 30min
+./scripts/update.sh              # update everything
+./scripts/setup-cron.sh          # auto-sync every 30min
 ```
 
-Add packages: edit `home.packages` in `home.nix`, run `./update.sh`
+Add packages: edit `home.packages` in `home.nix`, run `./scripts/update.sh`
 
 Rollback: `home-manager generations` then `home-manager switch --rollback`
 
@@ -51,15 +62,39 @@ Rollback: `home-manager generations` then `home-manager switch --rollback`
 git clone <repo> ~/.config/nix-config
 cd ~/.config/nix-config
 # Update flake.nix for this machine
-./install.sh
+./scripts/install.sh
+```
+
+## Directory Structure
+
+```
+├── flake.nix, home.nix        # Main Nix configuration
+├── configs/                   # All application configs
+│   ├── shell/                 # zshrc, p10k.zsh
+│   ├── tmux/                  # tmux.conf
+│   ├── nvim/                  # Neovim (LazyVim)
+│   ├── btop/                  # System monitor
+│   ├── gh/                    # GitHub CLI
+│   ├── mise/                  # Runtime version manager
+│   ├── zed/                   # Zed editor
+│   ├── yabai/                 # Window manager (macOS)
+│   ├── skhd/                  # Hotkey daemon (macOS)
+│   ├── sketchybar/            # Menu bar (macOS)
+│   ├── karabiner/             # Keyboard customizer (macOS)
+│   ├── linearmouse/           # Mouse settings (macOS)
+│   ├── rstudio/               # R Studio
+│   └── wireshark/             # Network analyzer
+├── scripts/                   # Installation & update scripts
+└── logs/                      # Auto-sync logs
 ```
 
 ## Config locations
 
-- Git: `programs.git` in home.nix
-- Zsh: `programs.zsh` in home.nix  
-- Tmux: `programs.tmux.extraConfig` in home.nix
-- Nvim: `~/.config/nvim` (LazyVim handles it)
+All configs are in `configs/` and automatically symlinked to `~/.config/` by home-manager.
+- **Nix packages**: Edit `home.packages` in `home.nix`
+- **Application configs**: Edit files in `configs/<app>/`
+- **Shell**: `configs/shell/zshrc`
+- **Window management**: `configs/yabai/`, `configs/skhd/`
 
 ## How it works
 

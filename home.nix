@@ -56,12 +56,78 @@ in
   ];
 
   home.file = {
-    ".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nix-config/zshrc";
-    ".p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nix-config/p10k.zsh";
-    ".config/tmux/tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nix-config/tmux.conf";
+    # Shell configs
+    ".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/shell/zshrc";
+    ".p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/shell/p10k.zsh";
 
+    # Tmux
+    ".config/tmux/tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/tmux/tmux.conf";
+
+    # Development tools
     ".config/nvim" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nvim";
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/nvim";
+      recursive = true;
+    };
+
+    ".config/btop" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/btop";
+      recursive = true;
+    };
+
+    ".config/gh" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/gh";
+      recursive = true;
+    };
+
+    ".config/mise" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/mise";
+      recursive = true;
+    };
+
+    ".config/neofetch" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/neofetch";
+      recursive = true;
+    };
+
+    ".config/zed" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/zed";
+      recursive = true;
+    };
+
+    # macOS-specific tools
+    ".config/karabiner" = lib.mkIf isMac {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/karabiner";
+      recursive = true;
+    };
+
+    ".config/linearmouse" = lib.mkIf isMac {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/linearmouse";
+      recursive = true;
+    };
+
+    ".config/sketchybar" = lib.mkIf isMac {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/sketchybar";
+      recursive = true;
+    };
+
+    ".config/skhd" = lib.mkIf isMac {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/skhd";
+      recursive = true;
+    };
+
+    ".config/yabai" = lib.mkIf isMac {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/yabai";
+      recursive = true;
+    };
+
+    # Other tools
+    ".config/rstudio" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/rstudio";
+      recursive = true;
+    };
+
+    ".config/wireshark" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/wireshark";
       recursive = true;
     };
   };
@@ -73,24 +139,24 @@ in
       if [ ! -d "$HOME/.oh-my-zsh" ]; then
         ${pkgs.curl}/bin/curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh -s -- --unattended
       fi
-      
+
       # Install zsh plugins
       if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
         ${pkgs.git}/bin/git clone https://github.com/zsh-users/zsh-autosuggestions \
           $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions
       fi
-      
+
       if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
         ${pkgs.git}/bin/git clone https://github.com/zsh-users/zsh-syntax-highlighting \
           $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
       fi
-      
+
       # Install powerlevel10k
       if [ ! -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
         ${pkgs.git}/bin/git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
           $HOME/.oh-my-zsh/custom/themes/powerlevel10k
       fi
-      
+
       # Install TPM
       if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
         ${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm \
