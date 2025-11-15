@@ -1,0 +1,150 @@
+# Powerlevel10k instant prompt - essential for perceived speed
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# PERFORMANCE OPTIMIZATIONS - must be set before Oh-My-Zsh loads
+export ZSH_DISABLE_COMPFIX=true
+DISABLE_COMPFIX="true"
+export DISABLE_AUTO_UPDATE="true"
+export DISABLE_UPDATE_PROMPT="true" 
+export DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Oh-My-Zsh configuration
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# Set custom completion dump location BEFORE loading Oh-My-Zsh
+export ZSH_COMPDUMP="$HOME/.cache/.zcompdump-$ZSH_VERSION"
+
+# PLUGINS - Enable the ones you want
+plugins=(
+  git
+  zsh-autosuggestions  
+  zsh-syntax-highlighting
+)
+
+# PLUGIN PERFORMANCE SETTINGS - set before loading
+export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+export ZSH_HIGHLIGHT_MAXLENGTH=60
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+# Load Oh-My-Zsh first (it handles compinit)
+source $ZSH/oh-my-zsh.sh
+
+# OPTIMIZED COMPLETION SYSTEM (after Oh-My-Zsh loads)
+ZSH_COMPDUMP="$HOME/.cache/.zcompdump-$ZSH_VERSION"
+[[ -d "$HOME/.cache" ]] || mkdir -p "$HOME/.cache" 2>/dev/null
+
+# Compile completion dump for faster loading (silent)
+{ 
+  _comp_path="$ZSH_COMPDUMP" 
+  [[ -f "$_comp_path" ]] && { zcompile "$_comp_path" } &!
+  unset _comp_path
+} 2>/dev/null
+
+# CUSTOM PATH MANAGEMENT
+export PATH="$HOME/bin:$HOME/.local/share/mise/shims:/opt/homebrew/opt/node@20/bin:/opt/homebrew/opt/postgresql@15/bin:$PATH"
+
+# ESSENTIAL ALIASES
+alias g='git'
+alias ga='git add'
+alias gc='git commit -m'
+alias gp='git push'
+alias gl='git pull'
+alias gst='git status'
+alias gco='git checkout'
+alias gb='git branch'
+alias gd='git diff'
+
+# ZOXIDE - modern cd replacement (silent initialization)
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh --cmd z)" 2>/dev/null
+  alias cd="z"
+fi
+
+# MISE - Direct activation (no lazy loading)
+if [[ -f ~/.local/bin/mise ]]; then
+  eval "$(~/.local/bin/mise activate zsh)" 2>/dev/null
+fi
+
+# CONDA LAZY LOADING (silent)
+if [[ -d /opt/anaconda3 ]]; then
+  function conda() {
+    unfunction conda
+    export PATH="/opt/anaconda3/bin:$PATH"
+    eval "$(/opt/anaconda3/bin/conda shell.zsh hook)" 2>/dev/null
+    conda "$@"
+  }
+fi
+
+
+# HISTORY CONFIGURATION
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE="$HOME/.zsh_history"
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_IGNORE_SPACE
+setopt SHARE_HISTORY
+setopt EXTENDED_HISTORY
+setopt HIST_VERIFY
+
+# ZSH OPTIONS FOR BETTER UX
+setopt AUTO_CD              # cd by typing directory name if it's not a command
+setopt CORRECT              # Auto correct mistakes
+setopt MAGIC_EQUAL_SUBST    # Enable filename expansion for arguments of the form 'anything=expression'
+setopt NULL_GLOB            # Don't error on empty glob matches
+setopt NUMERIC_GLOB_SORT    # Sort filenames numerically when it makes sense
+
+# ADDITIONAL USEFUL ALIASES
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# Git aliases (additional ones)
+alias gaa='git add --all'
+alias gcmsg='git commit -m'
+alias gcam='git commit -a -m'
+alias gps='git push'
+alias gpl='git pull'
+alias glog='git log --oneline --graph --decorate'
+
+# System-specific optimizations
+if [[ "$OSTYPE" == darwin* ]]; then
+  # macOS specific aliases
+  alias o='open'
+  alias pbc='pbcopy'
+  alias pbp='pbpaste'
+elif [[ "$OSTYPE" == linux* ]]; then
+  # Linux specific aliases
+  alias o='xdg-open'
+  alias pbcopy='xclip -selection clipboard'
+  alias pbpaste='xclip -selection clipboard -o'
+fi
+
+# Function to reload zsh config
+function reload() {
+  exec zsh
+}
+
+# Load Powerlevel10k config
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Load any local customizations
+[[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
+export PATH="/Library/Frameworks/Python.framework/Versions/3.13/bin:$PATH"
+
+# Add pyenv to PATH
+export PATH="$HOME/.pyenv/bin:$PATH"
+# Initialize pyenv
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+

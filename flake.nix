@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,41 +16,38 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, darwin, ... }: 
+  outputs = { self, nixpkgs, home-manager, darwin, ... }:
     let
       # Helper function to create home-manager config for different systems
-      mkHomeConfig = system: username: extraModules: 
+      mkHomeConfig = system: username: extraModules:
         home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs {
             inherit system;
             config.allowUnfree = true;
           };
-          
+
           modules = [
             ./home.nix
             {
               home = {
                 inherit username;
-                homeDirectory = if system == "x86_64-darwin" || system == "aarch64-darwin"
+                homeDirectory =
+                  if system == "x86_64-darwin" || system == "aarch64-darwin"
                   then "/Users/${username}"
                   else "/home/${username}";
                 stateVersion = "24.05";
               };
-              
-              # Set system type for conditional config
-              systemType = if system == "x86_64-darwin" || system == "aarch64-darwin"
-                then "macos"
-                else "linux";
             }
           ] ++ extraModules;
+
         };
     in
     {
       # macOS configurations
       homeConfigurations = {
         # Your Mac - replace with your actual username
-        "islamtayeb@macbook" = mkHomeConfig "aarch64-darwin" "islamtayeb" [];
-        
+        "islamtayeb@Islams-MacBook-Pro" = mkHomeConfig "aarch64-darwin" "islamtayeb" [ ];
+
         # Template for other machines - duplicate and customize as needed
         # "username@linux-server" = mkHomeConfig "x86_64-linux" "username" [];
       };

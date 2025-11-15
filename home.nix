@@ -1,200 +1,97 @@
 { config, pkgs, lib, ... }:
 
 let
-  # Detect if we're on macOS or Linux
   isMac = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
+  configDir = "${config.home.homeDirectory}/.config/nix-config";
 in
 {
-  # Allow unfree packages (for things like 1Password CLI if needed)
   nixpkgs.config.allowUnfree = true;
 
-  # Packages to install
+  # Just install packages - don't manage dotfiles
   home.packages = with pkgs; [
     # Core utilities
     git
-    gh              # GitHub CLI
+    gh
     curl
     wget
     tree
     
-    # Modern CLI replacements
+    # Modern CLI tools
     fzf
     ripgrep
     zoxide
     btop
-    bat             # Better cat
-    eza             # Better ls
-    fd              # Better find
+    bat
+    eza
+    fd
     
-    # Development tools
+    # Dev tools
     neovim
     tmux
     
-    # Language servers for LazyVim
+    # LSPs
     lua-language-server
-    nil             # Nix LSP
+    nil
     nodePackages.bash-language-server
     nodePackages.typescript-language-server
-    nodePackages.vscode-langservers-extracted  # HTML/CSS/JSON
-    pyright         # Python LSP
-    rust-analyzer   # Rust LSP
-    gopls           # Go LSP
+    nodePackages.vscode-langservers-extracted
+    pyright
+    rust-analyzer
+    gopls
     
     # Formatters
-    stylua          # Lua formatter
-    black           # Python formatter
-    nodePackages.prettier  # JS/TS/JSON formatter
+    stylua
+    nixpkgs-fmt
+    black
+    nodePackages.prettier
     
-    # Additional dev tools
-    jq              # JSON processor
-    yq              # YAML processor
-    
+    # Additional
+    jq
+    yq
   ] ++ lib.optionals isMac [
-    # macOS-specific packages
-    # Add Mac-specific tools here if needed
+    # macOS-specific
   ] ++ lib.optionals isLinux [
-    # Linux-specific packages
+    # Linux-specific
   ];
 
-  # Git configuration
-  programs.git = {
-    enable = true;
-    userName = "islamtayeb";
-    userEmail = "islam.moh.islamm@gmail.com";
-    
-    extraConfig = {
-      init.defaultBranch = "main";
-      pull.rebase = false;
-      core.editor = "nvim";
-    };
-    
-    aliases = {
-      st = "status";
-      co = "checkout";
-      br = "branch";
-      ci = "commit";
-      unstage = "reset HEAD --";
-      last = "log -1 HEAD";
-    };
+home.file = {
+  ".zshrc".source = ./zshrc;
+  ".p10k.zsh".source = ./p10k.zsh;
+  ".config/tmux/tmux.conf".source = ./tmux.conf;
+  
+  ".config/nvim" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nvim";
+    recursive = true;
   };
+};
 
-  # Zsh configuration
-  programs.zsh = {
-    enable = true;
-    
-    # Load oh-my-zsh
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "zsh-autosuggestions"
-        "zsh-syntax-highlighting"
-      ];
-      
-      # Use powerlevel10k theme
-      theme = "powerlevel10k";
-      
-      custom = "$HOME/.oh-my-zsh/custom";
-    };
-    
-    initExtra = ''
-      # Powerlevel10k instant prompt
-      if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-        source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+  # Install oh-my-zsh and TPM
+  home.activation = {
+    installDeps = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      # Install oh-my-zsh if missing
+      if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        ${pkgs.curl}/bin/curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh -s -- --unattended
       fi
       
-      # Source p10k config if it exists
-      [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-      
-      # Initialize zoxide
-      eval "$(zoxide init zsh)"
-      
-      # fzf configuration
-      export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-      export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-    '';
-    
-    shellAliases = {
-      vim = "nvim";
-      vi = "nvim";
-      ls = "eza";
-      ll = "eza -l";
-      la = "eza -la";
-      cat = "bat";
-      cd = "z";  # Use zoxide
-    };
-  };
-
-  # Tmux configuration - copy your existing config
-  programs.tmux = {
-    enable = true;
-    terminal = "screen-256color";
-    keyMode = "vi";
-    
-    extraConfig = ''
-      set-option -sa terminal-overrides ",xterm*:Tc"
-      unbind C-b
-      set -g prefix C-l
-      bind C-l send-prefix
-      
-      # TPM plugins - will be managed by TPM itself
-      set -g @plugin 'tmux-plugins/tpm'
-      set -g @plugin 'tmux-plugins/tmux-sensible'
-      set -g @plugin 'tmux-plugins/tmux-resurrect'
-      set -g @plugin 'tmux-plugins/tmux-continuum'
-      set -g @plugin 'tmux-prefix-highlight'
-      
-      set -g @continuum-save-interval '5'
-      set -g @continuum-boot 'off'
-      set -g @continuum-restore 'on'
-      set -g @resurrect-capture-pane-contents 'on'
-      set -g display-time 0
-      
-      set -g @plugin 'egel/tmux-gruvbox'
-      set -g @tmux-gruvbox 'dark'
-      
-      # Initialize TPM (must be at the bottom)
-      run '~/.tmux/plugins/tpm/tpm'
-    '';
-  };
-
-  # Copy existing dotfiles that Nix doesn't manage directly
-  home.file = {
-    # Your existing nvim config (LazyVim will manage plugins)
-    ".config/nvim" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nvim";
-      recursive = true;
-    };
-    
-    # Powerlevel10k config if you have one
-    ".p10k.zsh" = lib.mkIf (builtins.pathExists "${config.home.homeDirectory}/.p10k.zsh") {
-      source = "${config.home.homeDirectory}/.p10k.zsh";
-    };
-  };
-
-  # Install oh-my-zsh plugins that aren't built-in
-  home.activation = {
-    installOhMyZshPlugins = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      # Install zsh-autosuggestions
+      # Install zsh plugins
       if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
         ${pkgs.git}/bin/git clone https://github.com/zsh-users/zsh-autosuggestions \
           $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions
       fi
       
-      # Install zsh-syntax-highlighting
       if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
         ${pkgs.git}/bin/git clone https://github.com/zsh-users/zsh-syntax-highlighting \
           $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
       fi
       
-      # Install powerlevel10k theme
+      # Install powerlevel10k
       if [ ! -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
         ${pkgs.git}/bin/git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
           $HOME/.oh-my-zsh/custom/themes/powerlevel10k
       fi
       
-      # Install TPM (Tmux Plugin Manager)
+      # Install TPM
       if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
         ${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm \
           $HOME/.tmux/plugins/tpm
@@ -202,12 +99,10 @@ in
     '';
   };
 
-  # Session variables
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
   };
 
-  # Let Home Manager manage itself
   programs.home-manager.enable = true;
 }
