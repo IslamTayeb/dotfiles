@@ -79,11 +79,6 @@ in
       recursive = true;
     };
 
-    ".config/mise" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/mise";
-      recursive = true;
-    };
-
     ".config/neofetch" = {
       source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/neofetch";
       recursive = true;
