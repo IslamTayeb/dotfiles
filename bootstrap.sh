@@ -81,11 +81,33 @@ echo ""
 echo "🏗️  Running installation..."
 ./scripts/install.sh
 
+# Ensure zsh is the default shell
+echo ""
+echo "🐚 Setting zsh as default shell..."
+ZSH_PATH=$(command -v zsh)
+if [ -n "$ZSH_PATH" ]; then
+  # Add zsh to /etc/shells if not already there
+  if ! grep -q "$ZSH_PATH" /etc/shells 2>/dev/null; then
+    echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
+  fi
+
+  # Change default shell to zsh
+  if [ "$SHELL" != "$ZSH_PATH" ]; then
+    sudo chsh -s "$ZSH_PATH" "$USERNAME"
+    echo "✅ Default shell set to zsh"
+    export SHELL="$ZSH_PATH"
+  else
+    echo "✅ Shell already set to zsh"
+  fi
+else
+  echo "⚠️  Could not find zsh path, skipping shell change"
+fi
+
 echo ""
 echo "✨ Setup complete!"
 echo ""
 echo "Next steps:"
-echo "  - Restart your terminal"
+echo "  - Restart your terminal or reconnect SSH"
 echo "  - Open nvim to let LazyVim install plugins"
 echo "  - Run 'tmux' and press Ctrl-l then Shift-I to install plugins"
 echo ""
