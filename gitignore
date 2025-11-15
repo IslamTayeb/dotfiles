@@ -1,0 +1,16 @@
+# Nix build results
+result
+result-*
+
+# Backup files
+*.bak
+*~
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
