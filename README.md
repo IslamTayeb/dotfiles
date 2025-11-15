@@ -58,14 +58,64 @@ Add packages: edit `home.packages` in `home.nix`, run `./scripts/update.sh`
 
 Rollback: `home-manager generations` then `home-manager switch --rollback`
 
-## New machine
+## New machine setup
+
+### 1. Install Nix
 
 ```bash
-# Install Nix, enable flakes (see above)
-git clone <repo> ~/.config/nix-config
+sh <(curl -L https://nixos.org/nix/install)
+```
+
+### 2. Enable flakes
+
+```bash
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
+```
+
+### 3. Clone your dotfiles
+
+```bash
+git clone https://github.com/IslamTayeb/dotfiles.git ~/.config/nix-config
 cd ~/.config/nix-config
-# Update flake.nix for this machine
+```
+
+### 4. Update for this machine
+
+Edit `flake.nix` and add your machine's config:
+
+```nix
+homeConfigurations = {
+  "islamtayeb@Islams-MacBook-Pro" = mkHomeConfig "aarch64-darwin" "islamtayeb" [ ];
+  "your-username@new-machine" = mkHomeConfig "aarch64-darwin" "your-username" [ ];  # Add this
+};
+```
+
+### 5. Run installation
+
+```bash
+chmod +x scripts/*.sh
 ./scripts/install.sh
+```
+
+### 6. (Optional) Setup auto-commit
+
+If this is your main machine where you edit configs:
+
+```bash
+./scripts/setup-cron.sh
+```
+
+This auto-commits changes every 30 min so other machines can pull updates.
+
+### 7. Pull updates from other machines
+
+Whenever you want to sync configs from your main machine:
+
+```bash
+cd ~/.config/nix-config
+git pull
+./scripts/update.sh
 ```
 
 ## Directory Structure
