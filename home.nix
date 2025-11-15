@@ -105,15 +105,7 @@ in
       recursive = true;
     };
 
-    ".config/skhd" = lib.mkIf isMac {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/skhd";
-      recursive = true;
-    };
-
-    ".config/yabai" = lib.mkIf isMac {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/yabai";
-      recursive = true;
-    };
+    # Note: yabai and skhd are managed independently - not symlinked
 
     # Other tools
     ".config/rstudio" = {
