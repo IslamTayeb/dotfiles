@@ -16,7 +16,7 @@ in
     curl
     wget
     tree
-    
+
     # Modern CLI tools
     fzf
     ripgrep
@@ -25,11 +25,11 @@ in
     bat
     eza
     fd
-    
+
     # Dev tools
     neovim
     tmux
-    
+
     # LSPs
     lua-language-server
     nil
@@ -39,13 +39,13 @@ in
     pyright
     rust-analyzer
     gopls
-    
+
     # Formatters
     stylua
     nixpkgs-fmt
     black
     nodePackages.prettier
-    
+
     # Additional
     jq
     yq
@@ -55,20 +55,20 @@ in
     # Linux-specific
   ];
 
-home.file = {
-  ".zshrc".source = ./zshrc;
-  ".p10k.zsh".source = ./p10k.zsh;
-  ".config/tmux/tmux.conf".source = ./tmux.conf;
-  
-  ".config/nvim" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nvim";
-    recursive = true;
+  home.file = {
+    ".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nix-config/zshrc";
+    ".p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nix-config/p10k.zsh";
+    ".config/tmux/tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nix-config/tmux.conf";
+
+    ".config/nvim" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nvim";
+      recursive = true;
+    };
   };
-};
 
   # Install oh-my-zsh and TPM
   home.activation = {
-    installDeps = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    installDeps = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       # Install oh-my-zsh if missing
       if [ ! -d "$HOME/.oh-my-zsh" ]; then
         ${pkgs.curl}/bin/curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh -s -- --unattended
