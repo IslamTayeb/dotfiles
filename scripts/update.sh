@@ -18,6 +18,6 @@ CONFIG_NAME="${USERNAME}@${HOSTNAME}"
 
 # Rebuild and switch
 echo "🏗️  Rebuilding configuration..."
-nix run home-manager/master -- switch --flake ".#${CONFIG_NAME}"
+nix run home-manager/master -- switch --flake ".#${CONFIG_NAME}" -b backup
 
 echo "✅ Update complete!"

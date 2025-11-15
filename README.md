@@ -5,6 +5,7 @@ My shell/editor config managed with Nix. Works on macOS, Ubuntu, and Arch.
 ## What's in here
 
 **Development Tools:**
+
 - **Neovim** (LazyVim setup) - Full IDE experience
 - **Zsh** with oh-my-zsh and powerlevel10k - Beautiful shell
 - **Tmux** - Terminal multiplexer with plugins
@@ -12,12 +13,14 @@ My shell/editor config managed with Nix. Works on macOS, Ubuntu, and Arch.
 - **Modern CLI Tools** - fzf, ripgrep, zoxide, bat, eza, btop
 
 **macOS Window Management:**
+
 - **Yabai** - Tiling window manager
 - **SKHD** - Hotkey daemon
 - **Sketchybar** - Custom menu bar
 - **Karabiner** - Keyboard customization
 
 **Other Tools:**
+
 - gh, mise, neofetch, zed, rstudio, wireshark, linearmouse
 
 Everything installs automatically and syncs across machines.
@@ -91,6 +94,7 @@ cd ~/.config/nix-config
 ## Config locations
 
 All configs are in `configs/` and automatically symlinked to `~/.config/` by home-manager.
+
 - **Nix packages**: Edit `home.packages` in `home.nix`
 - **Application configs**: Edit files in `configs/<app>/`
 - **Shell**: `configs/shell/zshrc`
