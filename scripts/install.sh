@@ -43,12 +43,6 @@ nix run home-manager/master -- switch --flake ".#${CONFIG_NAME}" -b backup
 
 echo "✅ Home Manager activated!"
 
-# Set zsh as default shell if not already
-if [ "$SHELL" != "$(which zsh)" ]; then
-  echo "🐚 Setting zsh as default shell..."
-  chsh -s "$(which zsh)"
-fi
-
 # Auto-install tmux plugins
 echo "🔌 Installing tmux plugins..."
 if [ -d "$HOME/.tmux/plugins/tpm" ]; then
@@ -56,10 +50,45 @@ if [ -d "$HOME/.tmux/plugins/tpm" ]; then
 fi
 
 echo ""
-echo "✨ Setup complete! Reloading shell..."
+echo "✨ Setup complete!"
 echo ""
-echo "Next: Open nvim to let LazyVim install plugins"
-echo "Update later with: ./update.sh"
+
+# Ask about setting zsh as default shell
+if [ "$SHELL" != "$(command -v zsh)" ]; then
+  echo "🐚 Your current shell is: $SHELL"
+  read -p "Would you like to set zsh as your default shell? (y/N) " -n 1 -r
+  echo ""
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "🐚 Setting zsh as default shell..."
+    if chsh -s "$(command -v zsh)" 2>/dev/null; then
+      echo "✅ Default shell changed to zsh"
+      echo "   (You may need to log out and back in for this to take effect)"
+      SWITCH_TO_ZSH=true
+    else
+      echo "⚠️  Could not change default shell"
+      echo "   You may need sudo permissions or to contact your system administrator"
+      echo "   You can still use zsh by typing 'zsh' in your terminal"
+      SWITCH_TO_ZSH=false
+    fi
+  else
+    echo "ℹ️  Keeping current shell. You can always use zsh by typing 'zsh'"
+    SWITCH_TO_ZSH=false
+  fi
+else
+  echo "✅ Shell already set to zsh"
+  SWITCH_TO_ZSH=true
+fi
+
 echo ""
-sleep 2
-exec zsh
+echo "Next steps:"
+echo "  - Open nvim to let LazyVim install plugins"
+echo "  - Run 'tmux' and press Ctrl-l then Shift-I to install plugins"
+echo "  - Update later with: ./scripts/update.sh"
+echo ""
+
+# Only exec zsh if user wants to switch
+if [ "$SWITCH_TO_ZSH" = true ]; then
+  echo "Starting zsh..."
+  sleep 1
+  exec zsh
+fi

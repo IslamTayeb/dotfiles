@@ -119,35 +119,3 @@ fi
 echo ""
 echo "🏗️  Running installation..."
 ./scripts/install.sh
-
-# Check zsh status (but don't try to change it)
-echo ""
-echo "🐚 Checking shell status..."
-ZSH_PATH=$(command -v zsh)
-if [ -n "$ZSH_PATH" ]; then
-  if [ "$SHELL" != "$ZSH_PATH" ]; then
-    echo "ℹ️  Current shell: $SHELL"
-    echo "ℹ️  Zsh installed at: $ZSH_PATH"
-    echo ""
-    echo "To set zsh as your default shell, run:"
-    echo "  chsh -s $ZSH_PATH"
-    echo ""
-    echo "(You may need to add zsh to /etc/shells first if you get an error)"
-  else
-    echo "✅ Shell already set to zsh"
-  fi
-else
-  echo "⚠️  Could not find zsh path"
-fi
-
-echo ""
-echo "✨ Setup complete!"
-echo ""
-echo "Next steps:"
-echo "  - Restart your terminal or reconnect SSH"
-echo "  - Open nvim to let LazyVim install plugins"
-echo "  - Run 'tmux' and press Ctrl-l then Shift-I to install plugins"
-echo ""
-echo "Optional:"
-echo "  - Run './scripts/setup-cron.sh' to enable auto-commit"
-echo ""
