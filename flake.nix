@@ -48,6 +48,9 @@
         # Your Mac - replace with your actual username
         "islamtayeb@Islams-MacBook-Pro" = mkHomeConfig "aarch64-darwin" "islamtayeb" [ ];
 
+        # Linux server
+        "imt11@coltrane" = mkHomeConfig "x86_64-linux" "imt11" [ ];
+
         # Template for other machines - duplicate and customize as needed
         # "username@linux-server" = mkHomeConfig "x86_64-linux" "username" [];
       };
