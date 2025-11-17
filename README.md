@@ -40,6 +40,35 @@ That's it! The script will:
 - Guide you through configuration
 - Install everything
 
+## GitHub Authentication (Important!)
+
+To avoid API rate limits and enable git push/pull, set up authentication:
+
+### Option 1: Using GitHub CLI (Recommended)
+
+```bash
+# If gh is already installed
+gh auth login
+
+# If not installed, Nix will install it for you
+# Then after bootstrap completes:
+gh auth login
+```
+
+### Option 2: Manual Token Setup (for servers without gh)
+
+```bash
+# Get a token at: https://github.com/settings/tokens (classic token with 'repo' scope)
+
+# Add to Nix config (for avoiding rate limits)
+echo "access-tokens = github.com=YOUR_TOKEN_HERE" >> ~/.config/nix/nix.conf
+
+# For git push/pull over HTTPS
+git config --global credential.helper store
+echo "https://YOUR_TOKEN_HERE@github.com" >> ~/.git-credentials
+chmod 600 ~/.git-credentials
+```
+
 ## Manual Setup (if you prefer)
 
 <details>

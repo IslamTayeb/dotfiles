@@ -55,12 +55,26 @@ echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
 # Add GitHub token to avoid API rate limits (if gh is authenticated)
 if command -v gh &> /dev/null && gh auth status &> /dev/null; then
   echo "access-tokens = github.com=$(gh auth token)" >> ~/.config/nix/nix.conf
+  # Setup gh as git credential helper for HTTPS
+  gh auth setup-git 2>/dev/null || true
+  echo "✅ GitHub authentication configured"
+else
+  echo "⚠️  GitHub CLI (gh) not found or not authenticated"
+  echo "   To avoid API rate limits, you can:"
+  echo "   1. Install gh and run: gh auth login"
+  echo "   2. Or manually add to ~/.config/nix/nix.conf:"
+  echo "      access-tokens = github.com=YOUR_TOKEN_HERE"
+  echo ""
+  echo "   Get a token at: https://github.com/settings/tokens"
+  echo "   (Continuing without authentication may hit rate limits...)"
+  echo ""
+  read -p "Press Enter to continue..."
 fi
 
 # Clone repo if not already present
 if [ ! -d ~/.config/nix-config ]; then
   echo "📥 Cloning dotfiles..."
-  git clone git@github.com:IslamTayeb/dotfiles.git ~/.config/nix-config
+  git clone https://github.com/IslamTayeb/dotfiles.git ~/.config/nix-config
 else
   echo "✅ Dotfiles already cloned"
 fi
