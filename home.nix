@@ -74,47 +74,8 @@ in
       recursive = true;
     };
 
-    ".config/gh" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/gh";
-      recursive = true;
-    };
-
     ".config/neofetch" = {
       source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/neofetch";
-      recursive = true;
-    };
-
-    ".config/zed" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/zed";
-      recursive = true;
-    };
-
-    # macOS-specific tools
-    ".config/karabiner" = lib.mkIf isMac {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/karabiner";
-      recursive = true;
-    };
-
-    ".config/linearmouse" = lib.mkIf isMac {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/linearmouse";
-      recursive = true;
-    };
-
-    ".config/sketchybar" = lib.mkIf isMac {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/sketchybar";
-      recursive = true;
-    };
-
-    # Note: yabai and skhd are managed independently - not symlinked
-
-    # Other tools
-    ".config/rstudio" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/rstudio";
-      recursive = true;
-    };
-
-    ".config/wireshark" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/wireshark";
       recursive = true;
     };
   };
