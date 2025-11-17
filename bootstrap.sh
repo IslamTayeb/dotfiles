@@ -52,10 +52,15 @@ echo "🔧 Enabling flakes..."
 mkdir -p ~/.config/nix
 echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
 
+# Add GitHub token to avoid API rate limits (if gh is authenticated)
+if command -v gh &> /dev/null && gh auth status &> /dev/null; then
+  echo "access-tokens = github.com=$(gh auth token)" >> ~/.config/nix/nix.conf
+fi
+
 # Clone repo if not already present
 if [ ! -d ~/.config/nix-config ]; then
   echo "📥 Cloning dotfiles..."
-  git clone https://github.com/IslamTayeb/dotfiles.git ~/.config/nix-config
+  git clone git@github.com:IslamTayeb/dotfiles.git ~/.config/nix-config
 else
   echo "✅ Dotfiles already cloned"
 fi
