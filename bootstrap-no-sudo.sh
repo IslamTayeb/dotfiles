@@ -71,15 +71,35 @@ else
   read -p "Press Enter to continue..."
 fi
 
-# Clone repo if not already present
-if [ ! -d ~/.config/nix-config ]; then
+# Determine where the dotfiles are
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Check if we're already in the dotfiles repo
+if [ -f "$SCRIPT_DIR/flake.nix" ] && [ -f "$SCRIPT_DIR/home.nix" ]; then
+  echo "✅ Running from dotfiles directory"
+  cd "$SCRIPT_DIR"
+elif [ -d ~/.config/nix-config ] && [ -f ~/.config/nix-config/flake.nix ]; then
+  echo "✅ Using existing dotfiles at ~/.config/nix-config"
+  cd ~/.config/nix-config
+else
   echo "📥 Cloning dotfiles..."
   git clone https://github.com/IslamTayeb/dotfiles.git ~/.config/nix-config
-else
-  echo "✅ Dotfiles already cloned"
+  cd ~/.config/nix-config
 fi
 
-cd ~/.config/nix-config
+DOTFILES_DIR="$(pwd)"
+echo "📁 Dotfiles location: $DOTFILES_DIR"
+
+# Create symlink if needed (so home.nix can always find configs)
+if [ "$DOTFILES_DIR" != "$HOME/.config/nix-config" ]; then
+  if [ -e "$HOME/.config/nix-config" ] && [ ! -L "$HOME/.config/nix-config" ]; then
+    echo "⚠️  Warning: ~/.config/nix-config exists and is not a symlink"
+  else
+    mkdir -p "$HOME/.config"
+    ln -sfn "$DOTFILES_DIR" "$HOME/.config/nix-config"
+    echo "🔗 Created symlink: ~/.config/nix-config -> $DOTFILES_DIR"
+  fi
+fi
 
 # Make scripts executable
 chmod +x scripts/*.sh
