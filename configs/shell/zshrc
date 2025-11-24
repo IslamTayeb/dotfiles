@@ -26,8 +26,8 @@ plugins=(
 
 # PLUGIN PERFORMANCE SETTINGS - set before loading
 export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
-export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-export ZSH_HIGHLIGHT_MAXLENGTH=60
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=32
+export ZSH_HIGHLIGHT_MAXLENGTH=128
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # Load Oh-My-Zsh first (it handles compinit)
