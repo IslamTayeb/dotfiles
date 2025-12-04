@@ -58,6 +58,17 @@ alias gco='git checkout'
 alias gb='git branch'
 alias gd='git diff'
 
+nf() {
+  local msg="$*"
+  if [[ -z "$msg" ]]; then
+    echo "❌  Usage: nf <commit‑message>"
+    return 1
+  fi
+  git add -A
+  git commit -m "$msg"
+  git push
+}
+
 # ZOXIDE - modern cd replacement (silent initialization)
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh --cmd z)" 2>/dev/null
