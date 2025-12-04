@@ -20,6 +20,7 @@ export ZSH_COMPDUMP="$HOME/.cache/.zcompdump-$ZSH_VERSION"
 # PLUGINS - Enable the ones you want
 plugins=(
   git
+  fzf
   zsh-autosuggestions  
   zsh-syntax-highlighting
 )
