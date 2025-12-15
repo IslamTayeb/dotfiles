@@ -159,5 +159,6 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 # Initialize pyenv
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
+export PATH="$PATH:/Users/islamtayeb/.cargo/bin"
 
 
