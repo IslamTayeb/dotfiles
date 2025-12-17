@@ -161,4 +161,8 @@ eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 export PATH="$PATH:/Users/islamtayeb/.cargo/bin"
 
+alias ls='eza --icons --color=always --group-directories-first'
+alias ll='eza --icons --color=always --group-directories-first -l'
+alias la='eza --icons --color=always --group-directories-first -a'
+alias lt='eza --icons --color=always --group-directories-first --tree'
 
