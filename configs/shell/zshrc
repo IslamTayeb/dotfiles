@@ -166,3 +166,4 @@ alias ll='eza --icons --color=always --group-directories-first -l'
 alias la='eza --icons --color=always --group-directories-first -a'
 alias lt='eza --icons --color=always --group-directories-first --tree'
 
+export PATH="$HOME/bin:$PATH"
