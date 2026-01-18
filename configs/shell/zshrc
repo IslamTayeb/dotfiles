@@ -81,16 +81,27 @@ if [[ -f ~/.local/bin/mise ]]; then
   eval "$(~/.local/bin/mise activate zsh)" 2>/dev/null
 fi
 
-# CONDA LAZY LOADING (silent)
-if [[ -d /opt/anaconda3 ]]; then
-  function conda() {
-    unfunction conda
-    export PATH="/opt/anaconda3/bin:$PATH"
-    eval "$(/opt/anaconda3/bin/conda shell.zsh hook)" 2>/dev/null
-    conda "$@"
-  }
+# --- Conda (zsh) ---
+if [[ "$USER" == "romeroroot" ]]; then
+  # Remote machine (romeroroot): explicit conda setup required
+  export PATH="/home/romeroroot/miniconda3/bin:/home/romeroroot/miniconda3/condabin:$PATH"
+  __conda_setup="$('/home/romeroroot/miniconda3/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+  if [[ $? -eq 0 ]]; then
+    eval "$__conda_setup"
+  else
+    source "/home/romeroroot/miniconda3/etc/profile.d/conda.sh" 2>/dev/null
+  fi
+  unset __conda_setup
+else
+  # Local machine: lazy load conda (only initialize when first used)
+  if [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
+    source "$HOME/miniconda3/etc/profile.d/conda.sh"
+  elif [[ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]]; then
+    source "$HOME/anaconda3/etc/profile.d/conda.sh"
+  elif [[ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]]; then
+    source "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+  fi
 fi
-
 
 # HISTORY CONFIGURATION
 HISTSIZE=10000
