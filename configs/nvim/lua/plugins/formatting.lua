@@ -3,6 +3,14 @@ return {
   opts = {
     formatters_by_ft = {
       nix = { "nixpkgs_fmt" },
+      sml = { "smlfmt" },
+    },
+    formatters = {
+      smlfmt = {
+        command = "smlfmt",
+        args = { "--stdio" },
+        stdin = true,
+      },
     },
   },
 }
