@@ -180,3 +180,5 @@ alias lt='eza --icons --color=always --group-directories-first --tree'
 export PATH="$HOME/bin:$PATH"
 [ -f ~/.anthropic_secrets ] && source ~/.anthropic_secrets
 
+export PATH="/usr/local/smlnj/bin:$PATH"
+export PATH="/opt/homebrew/smlnj/bin:$PATH"
