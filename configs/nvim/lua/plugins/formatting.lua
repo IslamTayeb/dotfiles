@@ -8,7 +8,6 @@ return {
     formatters = {
       smlfmt = {
         command = "smlfmt",
-        args = { "--stdio" },
         stdin = true,
       },
     },
