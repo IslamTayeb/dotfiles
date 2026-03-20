@@ -182,3 +182,5 @@ export PATH="$HOME/bin:$PATH"
 
 export PATH="/usr/local/smlnj/bin:$PATH"
 export PATH="/opt/homebrew/smlnj/bin:$PATH"
+export EDITOR="nvim"
+export VISUAL="nvim"
