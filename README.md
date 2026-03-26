@@ -21,7 +21,7 @@ My shell/editor config managed with Nix. Works on macOS, Ubuntu, and Arch.
 
 **Other Tools:**
 
-- gh, mise, neofetch, zed, rstudio, wireshark, linearmouse
+- gh, mise, neofetch, opencode, zed, rstudio, wireshark, linearmouse
 
 Everything installs automatically and syncs across machines.
 
@@ -100,7 +100,7 @@ Shell reloads automatically. Open nvim once to finish plugin setup.
 
 ```bash
 ./scripts/update.sh              # update everything
-./scripts/setup-cron.sh          # auto-sync every 30min
+./scripts/setup-cron.sh          # auto-commit + push every 30min
 ```
 
 Add packages: edit `home.packages` in `home.nix`, run `./scripts/update.sh`
@@ -130,7 +130,7 @@ curl -fsSL https://raw.githubusercontent.com/IslamTayeb/dotfiles/main/bootstrap.
 
 ```bash
 cd ~/.config/nix-config
-./scripts/setup-cron.sh  # Auto-commits changes every 30 min
+./scripts/setup-cron.sh  # Auto-commits and pushes changes every 30 min
 ```
 
 **On secondary machines (to get updates):**
@@ -158,6 +158,7 @@ macOS-specific tools (yabai, skhd, karabiner) are automatically skipped on Linux
 │   ├── shell/                 # zshrc, p10k.zsh
 │   ├── tmux/                  # tmux.conf
 │   ├── nvim/                  # Neovim (LazyVim)
+│   ├── opencode/              # OpenCode config + custom tools
 │   ├── btop/                  # System monitor
 │   ├── gh/                    # GitHub CLI
 │   ├── mise/                  # Runtime version manager
@@ -181,6 +182,7 @@ All configs are in `configs/` and automatically symlinked to `~/.config/` by hom
 - **Application configs**: Edit files in `configs/<app>/`
 - **Shell**: `configs/shell/zshrc`
 - **Window management**: `configs/yabai/`, `configs/skhd/`
+- **OpenCode**: `configs/opencode/`
 
 ## How it works
 

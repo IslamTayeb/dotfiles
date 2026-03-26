@@ -78,6 +78,12 @@ in
       source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/neofetch";
       recursive = true;
     };
+
+    # OpenCode
+    ".config/opencode" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode";
+      recursive = true;
+    };
   };
 
   # Install oh-my-zsh and TPM
