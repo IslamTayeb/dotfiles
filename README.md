@@ -144,6 +144,56 @@ cd ~/.config/nix-config
 git pull && ./scripts/update.sh
 ```
 
+### Updating a Remote/Secondary Machine Without Breaking It
+
+If your remote machine (e.g. `imt11@coltrane`) already has this repo set up and you want to pull the latest changes:
+
+```bash
+cd ~/.config/nix-config
+
+# 1. Stash any local changes (if any)
+git stash
+
+# 2. Pull the latest from GitHub
+git pull origin main
+
+# 3. Reapply local changes (if you stashed anything)
+git stash pop
+
+# 4. Rebuild the Home Manager config
+./scripts/update.sh
+```
+
+If Home Manager fails due to a conflicting file (e.g. an existing `~/.config/opencode` directory that isn't a symlink yet), move the old one out of the way first:
+
+```bash
+mv ~/.config/opencode ~/.config/opencode.backup
+./scripts/update.sh
+```
+
+Things that happen automatically on `./scripts/update.sh`:
+- Nix packages are installed/updated
+- All config symlinks are created/updated
+- OpenCode tool dependencies (`node_modules/`) are installed via `bun install`
+- oh-my-zsh, zsh plugins, powerlevel10k, and TPM are installed if missing
+
+Things that are safe across systems:
+- Shell paths (`.local/bin`, `.opencode/bin`, `assay-finder/bin`, `.cargo/bin`, etc.) are only added to `PATH` if the directory exists
+- Conda auto-detects from multiple known install locations instead of checking usernames
+- `pyenv` and `mise` only initialize if the binary is present
+- macOS-only tools are skipped on Linux automatically
+
+**If something breaks on the remote machine:**
+
+```bash
+# Roll back to the previous Home Manager generation
+home-manager generations
+home-manager switch --rollback
+
+# Or rebuild from the current config
+./scripts/update.sh
+```
+
 ### Ubuntu/Debian Servers
 
 Same one-liner works! The bootstrap script auto-detects Linux and uses multi-user installation:
