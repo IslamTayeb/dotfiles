@@ -55,6 +55,8 @@ gh auth login
 gh auth login
 ```
 
+If your repo remote uses HTTPS, the auto-push cron job uses `gh` as its credential helper, so `gh auth login` is enough for unattended pushes too.
+
 ### Option 2: Manual Token Setup (for servers without gh)
 
 ```bash
@@ -106,6 +108,8 @@ Shell reloads automatically. Open nvim once to finish plugin setup.
 Add packages: edit `home.packages` in `home.nix`, run `./scripts/update.sh`
 
 Rollback: `home-manager generations` then `home-manager switch --rollback`
+
+OpenCode note: `configs/opencode/` syncs automatically, and Home Manager installs the custom tool dependencies for you when `package.json` or `bun.lock` changes.
 
 ## New Machine Setup
 
@@ -183,6 +187,8 @@ All configs are in `configs/` and automatically symlinked to `~/.config/` by hom
 - **Shell**: `configs/shell/zshrc`
 - **Window management**: `configs/yabai/`, `configs/skhd/`
 - **OpenCode**: `configs/opencode/`
+
+If you pull this repo on another machine and run `./scripts/update.sh`, the OpenCode config and its custom tool runtime are set up automatically.
 
 ## How it works
 

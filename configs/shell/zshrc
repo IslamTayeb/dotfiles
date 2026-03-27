@@ -46,7 +46,27 @@ ZSH_COMPDUMP="$HOME/.cache/.zcompdump-$ZSH_VERSION"
 } 2>/dev/null
 
 # CUSTOM PATH MANAGEMENT
-export PATH="$HOME/bin:$HOME/.local/share/mise/shims:/opt/homebrew/opt/node@20/bin:/opt/homebrew/opt/postgresql@15/bin:$PATH"
+typeset -U path PATH
+
+path_prepend_if_dir() {
+  [[ -d "$1" ]] || return 0
+  path=("$1" "${path[@]}")
+}
+
+path_prepend_if_dir "$HOME/bin"
+path_prepend_if_dir "$HOME/.local/bin"
+path_prepend_if_dir "$HOME/.opencode/bin"
+path_prepend_if_dir "$HOME/assay-finder/bin"
+path_prepend_if_dir "$HOME/.cargo/bin"
+path_prepend_if_dir "$HOME/.pyenv/bin"
+path_prepend_if_dir "$HOME/.local/share/mise/shims"
+path_prepend_if_dir "/opt/homebrew/opt/node@20/bin"
+path_prepend_if_dir "/opt/homebrew/opt/postgresql@15/bin"
+path_prepend_if_dir "/Library/Frameworks/Python.framework/Versions/3.13/bin"
+path_prepend_if_dir "/usr/local/smlnj/bin"
+path_prepend_if_dir "/opt/homebrew/smlnj/bin"
+export PATH
+export PYTHONNOUSERSITE="${PYTHONNOUSERSITE:-1}"
 
 # ESSENTIAL ALIASES
 alias g='git'
@@ -77,31 +97,35 @@ if command -v zoxide >/dev/null 2>&1; then
 fi
 
 # MISE - Direct activation (no lazy loading)
-if [[ -f ~/.local/bin/mise ]]; then
-  eval "$(~/.local/bin/mise activate zsh)" 2>/dev/null
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)" 2>/dev/null
 fi
 
 # --- Conda (zsh) ---
-if [[ "$USER" == "romeroroot" ]]; then
-  # Remote machine (romeroroot): explicit conda setup required
-  export PATH="/home/romeroroot/miniconda3/bin:/home/romeroroot/miniconda3/condabin:$PATH"
-  __conda_setup="$('/home/romeroroot/miniconda3/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-  if [[ $? -eq 0 ]]; then
-    eval "$__conda_setup"
-  else
-    source "/home/romeroroot/miniconda3/etc/profile.d/conda.sh" 2>/dev/null
+for _conda_root in \
+  "$HOME/miniconda3" \
+  "$HOME/anaconda3" \
+  "/opt/homebrew/Caskroom/miniconda/base" \
+  "/home/romeroroot/miniconda3"; do
+  if [[ -x "$_conda_root/bin/conda" ]]; then
+    path_prepend_if_dir "$_conda_root/bin"
+    path_prepend_if_dir "$_conda_root/condabin"
+    __conda_setup="$("$_conda_root/bin/conda" shell.zsh hook 2>/dev/null)"
+    if [[ -n "$__conda_setup" ]]; then
+      eval "$__conda_setup"
+    elif [[ -f "$_conda_root/etc/profile.d/conda.sh" ]]; then
+      source "$_conda_root/etc/profile.d/conda.sh"
+    fi
+    unset __conda_setup
+    break
+  elif [[ -f "$_conda_root/etc/profile.d/conda.sh" ]]; then
+    path_prepend_if_dir "$_conda_root/bin"
+    path_prepend_if_dir "$_conda_root/condabin"
+    source "$_conda_root/etc/profile.d/conda.sh"
+    break
   fi
-  unset __conda_setup
-else
-  # Local machine: lazy load conda (only initialize when first used)
-  if [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
-    source "$HOME/miniconda3/etc/profile.d/conda.sh"
-  elif [[ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]]; then
-    source "$HOME/anaconda3/etc/profile.d/conda.sh"
-  elif [[ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]]; then
-    source "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-  fi
-fi
+done
+unset _conda_root
 
 # HISTORY CONFIGURATION
 HISTSIZE=10000
@@ -163,24 +187,18 @@ function reload() {
 
 # Load any local customizations
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
-export PATH="/Library/Frameworks/Python.framework/Versions/3.13/bin:$PATH"
 
-# Add pyenv to PATH
-export PATH="$HOME/.pyenv/bin:$PATH"
 # Initialize pyenv
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-export PATH="$PATH:/Users/islamtayeb/.cargo/bin"
+if command -v pyenv >/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+fi
 
 alias ls='eza --icons --color=always --group-directories-first'
 alias ll='eza --icons --color=always --group-directories-first -l'
 alias la='eza --icons --color=always --group-directories-first -a'
 alias lt='eza --icons --color=always --group-directories-first --tree'
 
-export PATH="$HOME/bin:$PATH"
 [ -f ~/.anthropic_secrets ] && source ~/.anthropic_secrets
-
-export PATH="/usr/local/smlnj/bin:$PATH"
-export PATH="/opt/homebrew/smlnj/bin:$PATH"
 export EDITOR="nvim"
 export VISUAL="nvim"

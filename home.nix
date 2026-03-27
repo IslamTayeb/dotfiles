@@ -27,6 +27,7 @@ in
     fd
 
     # Dev tools
+    bun
     neovim
     tmux
 
@@ -48,6 +49,7 @@ in
 
     # Additional
     jq
+    pkgs."poppler-utils"
     yq
   ] ++ lib.optionals isMac [
     # macOS-specific
@@ -80,10 +82,12 @@ in
     };
 
     # OpenCode
-    ".config/opencode" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode";
-      recursive = true;
-    };
+    ".config/opencode/.gitignore".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/.gitignore";
+    ".config/opencode/bun.lock".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/bun.lock";
+    ".config/opencode/opencode.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/opencode.json";
+    ".config/opencode/package.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/package.json";
+    ".config/opencode/tui.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/tui.json";
+    ".config/opencode/tools/read_pdf.ts".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/tools/read_pdf.ts";
   };
 
   # Install oh-my-zsh and TPM
@@ -115,6 +119,19 @@ in
       if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
         ${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm \
           $HOME/.tmux/plugins/tpm
+      fi
+    '';
+
+    setupOpencode = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      opencode_dir="$HOME/.config/opencode"
+
+      if [ -f "$opencode_dir/package.json" ] && {
+        [ ! -d "$opencode_dir/node_modules" ] ||
+        [ "$opencode_dir/package.json" -nt "$opencode_dir/node_modules" ] ||
+        [ "$opencode_dir/bun.lock" -nt "$opencode_dir/node_modules" ];
+      }; then
+        echo "Installing OpenCode tool dependencies..."
+        ${pkgs.bun}/bin/bun install --cwd "$opencode_dir" --frozen-lockfile
       fi
     '';
   };

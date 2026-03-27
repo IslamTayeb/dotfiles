@@ -3,6 +3,8 @@ set -euo pipefail
 
 # Auto-commit and push dotfile changes to GitHub
 
+export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH:-}"
+
 # Set up SSH for git push (cron doesn't have ssh-agent)
 export GIT_SSH_COMMAND="ssh -i $HOME/.ssh/id_ed25519 -o IdentitiesOnly=yes"
 
@@ -11,10 +13,19 @@ ROOT_DIR="$SCRIPT_DIR/.."
 cd "$ROOT_DIR"
 
 BRANCH="$(git branch --show-current)"
+REMOTE_URL="$(git remote get-url origin)"
 
 if [[ -z "$BRANCH" ]]; then
     echo "❌ Could not determine the current git branch"
     exit 1
+fi
+
+PUSH_CMD=(git push origin "$BRANCH")
+
+if [[ "$REMOTE_URL" == https://github.com/* ]] && command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
+    PUSH_CMD=(git -c "credential.helper=!gh auth git-credential" push origin "$BRANCH")
+elif [[ "$REMOTE_URL" == https://github.com/* ]]; then
+    echo "⚠️ GitHub HTTPS remote detected but gh auth is unavailable; push may fail"
 fi
 
 # Check if there are changes
@@ -26,7 +37,7 @@ if [[ -n $(git status --porcelain) ]]; then
 
     echo "🚀 Pushing changes to origin/$BRANCH..."
 
-    if git push origin "$BRANCH"; then
+    if "${PUSH_CMD[@]}"; then
         echo "✅ Changes pushed to GitHub"
     else
         echo "❌ Failed to push to GitHub"
