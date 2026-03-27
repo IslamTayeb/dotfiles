@@ -4,6 +4,8 @@ set -euo pipefail
 # Auto-commit and push dotfile changes to GitHub
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH:-}"
+export GIT_TERMINAL_PROMPT=0
+export GH_PROMPT_DISABLED=1
 
 # Set up SSH for git push (cron doesn't have ssh-agent)
 export GIT_SSH_COMMAND="ssh -i $HOME/.ssh/id_ed25519 -o IdentitiesOnly=yes"
@@ -22,10 +24,10 @@ fi
 
 PUSH_CMD=(git push origin "$BRANCH")
 
-if [[ "$REMOTE_URL" == https://github.com/* ]] && command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
+if [[ "$REMOTE_URL" == https://github.com/* ]] && command -v gh >/dev/null 2>&1; then
     PUSH_CMD=(git -c "credential.helper=!gh auth git-credential" push origin "$BRANCH")
 elif [[ "$REMOTE_URL" == https://github.com/* ]]; then
-    echo "⚠️ GitHub HTTPS remote detected but gh auth is unavailable; push may fail"
+    echo "⚠️ GitHub HTTPS remote detected but gh is unavailable; push may fail"
 fi
 
 # Check if there are changes
