@@ -1,0 +1,22 @@
+{
+  "$schema": "https://opencode.ai/theme.json",
+  "name": "Gruvbox Transparent",
+  "appearance": "dark",
+  "colors": {
+    "primary": "#d79921",
+    "secondary": "#458588",
+    "accent": "#b16286",
+    "error": "#cc241d",
+    "warning": "#d79921",
+    "success": "#98971a",
+    "info": "#458588",
+    "text": "#ebdbb2",
+    "textMuted": "#a89984",
+    "background": "none",
+    "backgroundPanel": "none",
+    "backgroundElement": "#3c3836",
+    "border": "#504945",
+    "borderActive": "#d79921",
+    "borderSubtle": "#3c3836"
+  }
+}

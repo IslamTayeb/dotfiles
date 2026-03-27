@@ -87,7 +87,7 @@ in
     ".config/opencode/opencode.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/opencode.json";
     ".config/opencode/package.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/package.json";
     ".config/opencode/tui.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/tui.json";
-    ".config/opencode/tools/read_pdf.ts".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/tools/read_pdf.ts";
+    ".config/opencode/themes/gruvbox-transparent.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/themes/gruvbox-transparent.json";
   };
 
   # Install oh-my-zsh and TPM
@@ -124,6 +124,13 @@ in
 
     setupOpencode = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
       opencode_dir="$HOME/.config/opencode"
+      config_dir="${configDir}/configs/opencode"
+
+      # Copy tools (can't be symlinks — bun needs real files for module resolution)
+      mkdir -p "$opencode_dir/tools"
+      if [ -f "$config_dir/tools/read_pdf.ts" ]; then
+        cp -f "$config_dir/tools/read_pdf.ts" "$opencode_dir/tools/read_pdf.ts"
+      fi
 
       if [ -f "$opencode_dir/package.json" ] && {
         [ ! -d "$opencode_dir/node_modules" ] ||
