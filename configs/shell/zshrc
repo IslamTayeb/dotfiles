@@ -199,6 +199,21 @@ alias ll='eza --icons --color=always --group-directories-first -l'
 alias la='eza --icons --color=always --group-directories-first -a'
 alias lt='eza --icons --color=always --group-directories-first --tree'
 
+unzipd() {
+  if [[ -z "$1" || ! -f "$1" ]]; then
+    echo "Usage: unzipd <file.zip>"; return 1
+  fi
+  unzip "$1" && rm "$1"
+}
+
+flat() {
+  if [[ -z "$1" || ! -d "$1" ]]; then
+    echo "Usage: flat <directory>"; return 1
+  fi
+  mv "$1"/* "$1"/.[!.]* . 2>/dev/null
+  rmdir "$1" 2>/dev/null || echo "Warning: '$1' not empty, not removed"
+}
+
 [ -f ~/.anthropic_secrets ] && source ~/.anthropic_secrets
 export EDITOR="nvim"
 export VISUAL="nvim"
