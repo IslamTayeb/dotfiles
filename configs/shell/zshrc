@@ -69,6 +69,7 @@ export PATH
 export PYTHONNOUSERSITE="${PYTHONNOUSERSITE:-1}"
 
 # ESSENTIAL ALIASES
+alias 'ssh openclaw'='ssh -i ~/Documents/GitHub/clawd-bot-setup/clawd-bot-key.pem ec2-user@54.83.24.134'
 alias g='git'
 alias ga='git add'
 alias gc='git commit -m'
