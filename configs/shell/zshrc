@@ -169,12 +169,10 @@ alias glog='git log --oneline --graph --decorate'
 # System-specific optimizations
 if [[ "$OSTYPE" == darwin* ]]; then
   # macOS specific aliases
-  alias o='open'
   alias pbc='pbcopy'
   alias pbp='pbpaste'
 elif [[ "$OSTYPE" == linux* ]]; then
   # Linux specific aliases
-  alias o='xdg-open'
   alias pbcopy='xclip -selection clipboard'
   alias pbpaste='xclip -selection clipboard -o'
 fi
