@@ -19,13 +19,13 @@ cd "$ROOT_DIR"
 
 REMOTE_URL="$(git remote get-url origin)"
 
-PULL_CMD=(git pull)
+GIT_PULL_ARGS=()
 if [[ "$REMOTE_URL" == https://github.com/* ]] && command -v gh >/dev/null 2>&1; then
-    PULL_CMD=(git -c "credential.helper=!gh auth git-credential" pull)
+    GIT_PULL_ARGS=(-c "credential.helper=!gh auth git-credential")
 fi
 
 echo "Pulling latest changes..."
-if "${PULL_CMD[@]}"; then
+if git "${GIT_PULL_ARGS[@]}" pull 2>&1; then
     echo "Pull complete"
 else
     echo "Failed to pull from GitHub"

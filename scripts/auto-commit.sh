@@ -28,10 +28,9 @@ if [[ -z "$BRANCH" ]]; then
     exit 1
 fi
 
-PUSH_CMD=(git push origin "$BRANCH")
-
+GIT_PUSH_ARGS=()
 if [[ "$REMOTE_URL" == https://github.com/* ]] && command -v gh >/dev/null 2>&1; then
-    PUSH_CMD=(git -c "credential.helper=!gh auth git-credential" push origin "$BRANCH")
+    GIT_PUSH_ARGS=(-c "credential.helper=!gh auth git-credential")
 elif [[ "$REMOTE_URL" == https://github.com/* ]]; then
     echo "GitHub HTTPS remote detected but gh is unavailable; push may fail"
 fi
@@ -47,7 +46,7 @@ fi
 UNPUSHED="$(git log origin/"$BRANCH".."$BRANCH" --oneline 2>/dev/null || true)"
 if [[ -n "$UNPUSHED" ]]; then
     echo "Pushing commits to origin/$BRANCH..."
-    if "${PUSH_CMD[@]}"; then
+    if git "${GIT_PUSH_ARGS[@]}" push origin "$BRANCH" 2>&1; then
         echo "Changes pushed to GitHub"
     else
         echo "Failed to push to GitHub"
