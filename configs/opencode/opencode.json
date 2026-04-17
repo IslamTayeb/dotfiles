@@ -1,12 +1,36 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "amazon-bedrock/us.anthropic.claude-opus-4-6-v1:max",
+  "model": "amazon-bedrock/us.anthropic.claude-opus-4-7:max",
   "permission": "allow",
   "provider": {
     "amazon-bedrock": {
       "options": {
         "region": "us-east-1",
         "profile": "default"
+      },
+      "models": {
+        "us.anthropic.claude-opus-4-7": {
+          "variants": {
+            "max": {
+              "reasoningConfig": {
+                "type": "adaptive",
+                "maxReasoningEffort": "max"
+              }
+            },
+            "high": {
+              "reasoningConfig": {
+                "type": "adaptive",
+                "maxReasoningEffort": "high"
+              }
+            },
+            "xhigh": {
+              "reasoningConfig": {
+                "type": "adaptive",
+                "maxReasoningEffort": "xhigh"
+              }
+            }
+          }
+        }
       }
     },
     "openai": {
