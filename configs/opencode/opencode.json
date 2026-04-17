@@ -12,9 +12,9 @@
         "us.anthropic.claude-opus-4-7": {
           "name": "Claude Opus 4.7 (custom)",
           "options": {
-            "reasoningConfig": {
-              "type": "adaptive",
-              "maxReasoningEffort": "max"
+            "additionalModelRequestFields": {
+              "thinking": { "type": "adaptive" },
+              "output_config": { "effort": "max" }
             }
           }
         }
