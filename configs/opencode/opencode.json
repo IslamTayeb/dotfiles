@@ -7,17 +7,6 @@
       "options": {
         "region": "us-east-1",
         "profile": "default"
-      },
-      "models": {
-        "us.anthropic.claude-opus-4-7": {
-          "name": "Claude Opus 4.7 (custom)",
-          "options": {
-            "additionalModelRequestFields": {
-              "thinking": { "type": "adaptive" },
-              "output_config": { "effort": "max" }
-            }
-          }
-        }
       }
     },
     "openai": {
