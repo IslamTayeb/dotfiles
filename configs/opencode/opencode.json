@@ -21,7 +21,12 @@
   },
   "formatter": {
     "prettier": {
-      "command": ["npx", "prettier", "--write", "$FILE"],
+      "command": [
+        "npx",
+        "prettier",
+        "--write",
+        "$FILE"
+      ],
       "extensions": [
         ".js",
         ".ts",
@@ -35,8 +40,16 @@
       ]
     },
     "ruff": {
-      "command": ["uv", "run", "ruff", "format", "$FILE"],
-      "extensions": [".py"]
+      "command": [
+        "uv",
+        "run",
+        "ruff",
+        "format",
+        "$FILE"
+      ],
+      "extensions": [
+        ".py"
+      ]
     }
   }
 }
