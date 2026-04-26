@@ -177,6 +177,19 @@ elif [[ "$OSTYPE" == linux* ]]; then
   alias pbpaste='xclip -selection clipboard -o'
 fi
 
+# OSC 52 clipboard for SSH sessions — sends copied data back to the client terminal.
+# Skipped on the local macbook so the native pbcopy is preserved there.
+if [[ -n "$SSH_CONNECTION" || -n "$SSH_TTY" || -n "$SSH_CLIENT" ]]; then
+  unalias pbcopy 2>/dev/null
+  # `function` keyword (no parens) avoids zsh alias-expansion at parse time
+  function pbcopy {
+    local data
+    data=$(cat; echo x)        # echo x preserves trailing newlines
+    data=${data%x}
+    printf "\033]52;c;%s\a" "$(printf '%s' "$data" | base64 | tr -d '\n')"
+  }
+fi
+
 # Function to reload zsh config
 function reload() {
   exec zsh
