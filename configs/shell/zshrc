@@ -216,7 +216,17 @@ unzipd() {
   if [[ -z "$1" || ! -f "$1" ]]; then
     echo "Usage: unzipd <file.zip>"; return 1
   fi
-  unzip "$1" && rm "$1"
+  local contents top_dirs
+  contents=$(unzip -Z1 "$1") || return 1
+  top_dirs=$(echo "$contents" | awk -F/ '{print $1}' | sort -u)
+  if [[ $(echo "$top_dirs" | wc -l) -eq 1 ]] && ! echo "$contents" | grep -qE '^[^/]+$'; then
+    # Everything is already nested inside a single top-level directory
+    unzip "$1" && rm "$1"
+  else
+    # Loose files at root — wrap in a dir named after the zip
+    local dir="${1:t:r}"
+    mkdir -p "$dir" && unzip "$1" -d "$dir" && rm "$1"
+  fi
 }
 
 flat() {
