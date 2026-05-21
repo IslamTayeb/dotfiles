@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Ensure nix is in PATH (needed for cron)
+# Ensure nix is in PATH.
 export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH:-}"
 
 echo "Updating Nix dotfiles..."

@@ -23,7 +23,7 @@ My shell/editor config managed with Nix. Works on macOS, Ubuntu, and Arch.
 
 - gh, mise, neofetch, opencode, zed, rstudio, wireshark, linearmouse
 
-Everything installs automatically and syncs across machines.
+Everything installs automatically and can be updated manually across machines.
 
 ## Quick Setup (One Command)
 
@@ -42,7 +42,7 @@ That's it! The script will:
 
 ## GitHub Authentication (Important!)
 
-To avoid API rate limits and enable git push/pull, set up authentication:
+To avoid API rate limits and enable private GitHub access, set up authentication:
 
 ### Option 1: Using GitHub CLI (Recommended)
 
@@ -55,8 +55,6 @@ gh auth login
 gh auth login
 ```
 
-If your repo remote uses HTTPS, the auto-push cron job uses `gh` as its credential helper, so `gh auth login` is enough for unattended pushes too.
-
 ### Option 2: Manual Token Setup (for servers without gh)
 
 ```bash
@@ -65,7 +63,7 @@ If your repo remote uses HTTPS, the auto-push cron job uses `gh` as its credenti
 # Add to Nix config (for avoiding rate limits)
 echo "access-tokens = github.com=YOUR_TOKEN_HERE" >> ~/.config/nix/nix.conf
 
-# For git push/pull over HTTPS
+# For private HTTPS remotes
 git config --global credential.helper store
 echo "https://YOUR_TOKEN_HERE@github.com" >> ~/.git-credentials
 chmod 600 ~/.git-credentials
@@ -102,7 +100,6 @@ Shell reloads automatically. Open nvim once to finish plugin setup.
 
 ```bash
 ./scripts/update.sh              # update everything
-./scripts/setup-cron.sh          # auto-commit + push every 30min
 ```
 
 Add packages: edit `home.packages` in `home.nix`, run `./scripts/update.sh`
@@ -129,13 +126,6 @@ curl -fsSL https://raw.githubusercontent.com/IslamTayeb/dotfiles/main/bootstrap.
 6. Runs installation
 
 ### After Installation
-
-**On your main editing machine:**
-
-```bash
-cd ~/.config/nix-config
-./scripts/setup-cron.sh  # Auto-commits and pushes changes every 30 min
-```
 
 **On secondary machines (to get updates):**
 
@@ -224,8 +214,7 @@ macOS-specific tools (yabai, skhd, karabiner) are automatically skipped on Linux
 │   ├── linearmouse/           # Mouse settings (macOS)
 │   ├── rstudio/               # R Studio
 │   └── wireshark/             # Network analyzer
-├── scripts/                   # Installation & update scripts
-└── logs/                      # Auto-sync logs
+└── scripts/                   # Installation & update scripts
 ```
 
 ## Config locations
