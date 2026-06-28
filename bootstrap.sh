@@ -68,7 +68,9 @@ else
   echo "   Get a token at: https://github.com/settings/tokens"
   echo "   (Continuing without authentication may hit rate limits...)"
   echo ""
-  read -p "Press Enter to continue..."
+  if [ -r /dev/tty ]; then
+    read -r -p "Press Enter to continue..." < /dev/tty
+  fi
 fi
 
 # Determine where the dotfiles are
@@ -105,14 +107,40 @@ fi
 chmod +x scripts/*.sh
 
 # Check if this machine is already configured in flake.nix
-if ! grep -q "$CONFIG_NAME" flake.nix; then
+add_home_configuration() {
+  local tmp_file
+  tmp_file="$(mktemp)"
+
+  if awk -v config_name="$CONFIG_NAME" -v arch="$ARCH" -v username="$USERNAME" '
+    /# Template for other machines/ && ! inserted {
+      print "        \"" config_name "\" = mkHomeConfig \"" arch "\" \"" username "\" [ ];"
+      print ""
+      inserted = 1
+    }
+    { print }
+    END { if (!inserted) exit 1 }
+  ' flake.nix > "$tmp_file"; then
+    mv "$tmp_file" flake.nix
+  else
+    rm -f "$tmp_file"
+    return 1
+  fi
+}
+
+if ! grep -Fq "\"$CONFIG_NAME\"" flake.nix; then
   echo ""
   echo "⚠️  This machine ($CONFIG_NAME) is not configured in flake.nix yet."
   echo ""
-  echo "Please add to flake.nix homeConfigurations:"
+  echo "Adding to flake.nix homeConfigurations:"
   echo "  \"$CONFIG_NAME\" = mkHomeConfig \"$ARCH\" \"$USERNAME\" [ ];"
   echo ""
-  read -p "Press Enter after you've added it (or Ctrl+C to exit)..."
+  if add_home_configuration; then
+    echo "✅ Added $CONFIG_NAME to flake.nix"
+  else
+    echo "❌ Could not update flake.nix automatically. Add this line under homeConfigurations:"
+    echo "  \"$CONFIG_NAME\" = mkHomeConfig \"$ARCH\" \"$USERNAME\" [ ];"
+    exit 1
+  fi
 fi
 
 # Run installation

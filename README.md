@@ -14,6 +14,7 @@ The bootstrap script will:
 - enable flakes
 - clone this repo to `~/.config/nix-config`
 - detect `username@hostname` and system architecture
+- add the machine to `flake.nix` if missing
 - run `scripts/install.sh` to activate Home Manager
 
 If Nix is already installed and you cannot use sudo, run:
@@ -24,7 +25,7 @@ curl -fsSL https://raw.githubusercontent.com/IslamTayeb/dotfiles/main/bootstrap-
 
 ## Add a new host
 
-If bootstrap says the machine is missing from `flake.nix`, add it under `homeConfigurations`:
+Bootstrap adds the detected machine to `flake.nix` automatically. If it cannot, add it under `homeConfigurations`:
 
 ```nix
 "username@hostname" = mkHomeConfig "x86_64-linux" "username" [ ];
@@ -32,7 +33,7 @@ If bootstrap says the machine is missing from `flake.nix`, add it under `homeCon
 
 Use the detected system from the bootstrap output, such as `aarch64-darwin`, `x86_64-darwin`, `x86_64-linux`, or `aarch64-linux`.
 
-Then continue the bootstrap script, or run:
+Then run:
 
 ```bash
 cd ~/.config/nix-config

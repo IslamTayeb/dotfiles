@@ -16,6 +16,7 @@ in
     curl
     wget
     tree
+    unzip
 
     # Modern CLI tools
     fzf
@@ -27,6 +28,7 @@ in
     fd
 
     # Dev tools
+    zsh
     bun
     neovim
     tmux
@@ -54,7 +56,7 @@ in
   ] ++ lib.optionals isMac [
     # macOS-specific
   ] ++ lib.optionals isLinux [
-    # Linux-specific
+    xclip
   ];
 
   home.file = {

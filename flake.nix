@@ -50,6 +50,7 @@
 
         # Linux server
         "imt11@coltrane" = mkHomeConfig "x86_64-linux" "imt11" [ ];
+        "islam@typhon" = mkHomeConfig "x86_64-linux" "islam" [ ];
 
         # Template for other machines - duplicate and customize as needed
         # "username@linux-server" = mkHomeConfig "x86_64-linux" "username" [];
