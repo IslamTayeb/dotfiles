@@ -94,7 +94,12 @@ in
 
   # Install oh-my-zsh and TPM
   home.activation = {
-    installDeps = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    installDeps = lib.hm.dag.entryAfter [ "installPackages" "linkGeneration" ] ''
+      export PATH="${lib.makeBinPath [ pkgs.zsh pkgs.git pkgs.curl ]}:$PATH"
+      export CHSH=no
+      export RUNZSH=no
+      export KEEP_ZSHRC=yes
+
       # Install oh-my-zsh if missing
       if [ ! -d "$HOME/.oh-my-zsh" ]; then
         ${pkgs.curl}/bin/curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh -s -- --unattended

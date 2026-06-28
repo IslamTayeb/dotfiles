@@ -4,8 +4,32 @@ set -e
 echo "🚀 Setting up Nix dotfiles..."
 
 # Get the directory where this script is located (go to parent of scripts dir)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 cd "$SCRIPT_DIR"
+
+# Make Nix available when the script is run from a non-login SSH shell.
+if ! command -v nix >/dev/null 2>&1; then
+  if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  fi
+fi
+
+if ! command -v nix >/dev/null 2>&1; then
+  echo "❌ Nix is not available in PATH. Install Nix or source its profile first."
+  exit 1
+fi
+
+# home.nix links config files through this stable path.
+CONFIG_DIR="$HOME/.config/nix-config"
+if [ "$SCRIPT_DIR" != "$CONFIG_DIR" ]; then
+  mkdir -p "$HOME/.config"
+  if [ -L "$CONFIG_DIR" ] || [ ! -e "$CONFIG_DIR" ]; then
+    ln -sfn "$SCRIPT_DIR" "$CONFIG_DIR"
+  elif [ ! -d "$CONFIG_DIR" ] || [ "$(cd "$CONFIG_DIR" && pwd -P)" != "$SCRIPT_DIR" ]; then
+    echo "⚠️  $CONFIG_DIR exists and does not point to $SCRIPT_DIR"
+    echo "   Home Manager config symlinks may not resolve correctly."
+  fi
+fi
 
 # Initialize git if not already done
 if [ ! -d ".git" ]; then
@@ -46,7 +70,24 @@ echo "✅ Home Manager activated!"
 # Auto-install tmux plugins
 echo "🔌 Installing tmux plugins..."
 if [ -d "$HOME/.tmux/plugins/tpm" ]; then
-  bash "$HOME/.tmux/plugins/tpm/bin/install_plugins"
+  TMUX_BIN="$(command -v tmux || true)"
+  if [ -z "$TMUX_BIN" ] && [ -x "$HOME/.nix-profile/bin/tmux" ]; then
+    TMUX_BIN="$HOME/.nix-profile/bin/tmux"
+  fi
+  if [ -z "$TMUX_BIN" ] && [ -x "/etc/profiles/per-user/$USER/bin/tmux" ]; then
+    TMUX_BIN="/etc/profiles/per-user/$USER/bin/tmux"
+  fi
+  if [ -z "$TMUX_BIN" ] && [ -x "/nix/var/nix/profiles/per-user/$USER/profile/bin/tmux" ]; then
+    TMUX_BIN="/nix/var/nix/profiles/per-user/$USER/profile/bin/tmux"
+  fi
+
+  if [ -n "$TMUX_BIN" ]; then
+    export PATH="${TMUX_BIN%/*}:$PATH"
+    "$TMUX_BIN" start-server \; set-environment -g TMUX_PLUGIN_MANAGER_PATH "$HOME/.tmux/plugins"
+    bash "$HOME/.tmux/plugins/tpm/bin/install_plugins"
+  else
+    echo "⚠️  tmux is not available; skipping tmux plugin install."
+  fi
 fi
 
 echo ""
@@ -82,7 +123,7 @@ fi
 echo ""
 echo "Next steps:"
 echo "  - Open nvim to let LazyVim install plugins"
-echo "  - Run 'tmux' and press Ctrl-l then Shift-I to install plugins"
+echo "  - Run 'tmux' (prefix is Ctrl-b over SSH, Ctrl-l locally)"
 echo "  - Update later with: ./scripts/update.sh"
 echo ""
 
