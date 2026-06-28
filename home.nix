@@ -36,9 +36,9 @@ in
     # LSPs
     lua-language-server
     nil
-    nodePackages.bash-language-server
-    nodePackages.typescript-language-server
-    nodePackages.vscode-langservers-extracted
+    bash-language-server
+    typescript-language-server
+    vscode-langservers-extracted
     pyright
     rust-analyzer
     gopls
@@ -47,7 +47,7 @@ in
     stylua
     nixpkgs-fmt
     black
-    nodePackages.prettier
+    prettier
 
     # Additional
     jq
