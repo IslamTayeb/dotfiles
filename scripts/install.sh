@@ -94,30 +94,65 @@ echo ""
 echo "✨ Setup complete!"
 echo ""
 
-# Ask about setting zsh as default shell
-if [ "$SHELL" != "$(command -v zsh)" ]; then
-  echo "🐚 Your current shell is: $SHELL"
+# Prefer zsh as the login shell. Linux setup should be useful on first SSH
+# without an interactive prompt, so try non-interactive changes first.
+ZSH_PATH="$(command -v zsh || true)"
+LOGIN_SHELL="$(getent passwd "$USER" 2>/dev/null | awk -F: '{print $7}' || true)"
+IS_INTERACTIVE=false
+if [ -t 0 ] && [ -t 1 ]; then
+  IS_INTERACTIVE=true
+fi
+
+set_login_shell_to_zsh() {
+  if [ -z "$ZSH_PATH" ]; then
+    echo "⚠️  zsh is not installed or not in PATH; leaving login shell unchanged."
+    return 1
+  fi
+
+  if [ "$LOGIN_SHELL" = "$ZSH_PATH" ]; then
+    echo "✅ Login shell already set to zsh"
+    return 0
+  fi
+
+  echo "🐚 Setting zsh as default shell..."
+
+  if chsh -s "$ZSH_PATH" "$USER" </dev/null 2>/dev/null || chsh -s "$ZSH_PATH" </dev/null 2>/dev/null; then
+    echo "✅ Default shell changed to zsh"
+    return 0
+  fi
+
+  if command -v sudo >/dev/null 2>&1 && sudo -n chsh -s "$ZSH_PATH" "$USER" 2>/dev/null; then
+    echo "✅ Default shell changed to zsh with sudo"
+    return 0
+  fi
+
+  echo "⚠️  Could not change the login shell automatically."
+  echo "   Run this manually if needed: chsh -s $ZSH_PATH"
+  return 1
+}
+
+if [[ "$SYSTEM" == *linux ]]; then
+  if set_login_shell_to_zsh; then
+    SWITCH_TO_ZSH=true
+  else
+    SWITCH_TO_ZSH=false
+  fi
+elif [ -n "$ZSH_PATH" ] && [ "$LOGIN_SHELL" = "$ZSH_PATH" ]; then
+  echo "✅ Login shell already set to zsh"
+  SWITCH_TO_ZSH=true
+elif [ "$IS_INTERACTIVE" = true ]; then
+  echo "🐚 Your current login shell is: ${LOGIN_SHELL:-$SHELL}"
   read -p "Would you like to set zsh as your default shell? (y/N) " -n 1 -r
   echo ""
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo "🐚 Setting zsh as default shell..."
-    if chsh -s "$(command -v zsh)" 2>/dev/null; then
-      echo "✅ Default shell changed to zsh"
-      echo "   (You may need to log out and back in for this to take effect)"
-      SWITCH_TO_ZSH=true
-    else
-      echo "⚠️  Could not change default shell"
-      echo "   You may need sudo permissions or to contact your system administrator"
-      echo "   You can still use zsh by typing 'zsh' in your terminal"
-      SWITCH_TO_ZSH=false
-    fi
+  if [[ $REPLY =~ ^[Yy]$ ]] && set_login_shell_to_zsh; then
+    SWITCH_TO_ZSH=true
   else
     echo "ℹ️  Keeping current shell. You can always use zsh by typing 'zsh'"
     SWITCH_TO_ZSH=false
   fi
 else
-  echo "✅ Shell already set to zsh"
-  SWITCH_TO_ZSH=true
+  echo "ℹ️  Non-interactive non-Linux install; leaving login shell unchanged."
+  SWITCH_TO_ZSH=false
 fi
 
 echo ""
@@ -127,9 +162,14 @@ echo "  - Run 'tmux' (prefix is Ctrl-b over SSH, Ctrl-l locally)"
 echo "  - Update later with: ./scripts/update.sh"
 echo ""
 
-# Only exec zsh if user wants to switch
+# Only exec zsh for an actual interactive terminal. Non-interactive installs
+# should finish cleanly so bootstrap/CI/SSH provisioning can continue.
 if [ "$SWITCH_TO_ZSH" = true ]; then
-  echo "Starting zsh..."
-  sleep 1
-  exec zsh
+  if [ "$IS_INTERACTIVE" = true ]; then
+    echo "Starting zsh..."
+    sleep 1
+    exec zsh -l
+  else
+    echo "zsh will be used on the next login/session."
+  fi
 fi
