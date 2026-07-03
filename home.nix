@@ -61,6 +61,7 @@ in
 
   home.file = {
     # Shell configs
+    ".zshenv".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/shell/zshenv";
     ".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/shell/zshrc";
     ".p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/shell/p10k.zsh";
 
