@@ -1,0 +1,4 @@
+interface:
+  display_name: "DCC Clean Operations"
+  short_description: "Operate cleanly on Duke DCC"
+  default_prompt: "Use $dcc-clean-operations to move this project onto DCC and run it cleanly."

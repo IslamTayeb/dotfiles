@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "remoteConnectionMaxRetryAttempts": 2,
+  "sshConnectTimeoutSeconds": 15,
+  "remoteConnections": [
+    {
+      "sshAlias": "resembool",
+      "projects": [
+        {
+          "remotePath": "/work/projects/Mapperatorinator",
+          "label": "Mapperatorinator"
+        },
+        {
+          "remotePath": "/work/projects/alembic-dev",
+          "label": "alembic-dev"
+        },
+        {
+          "remotePath": "/work/projects/typhon",
+          "label": "typhon"
+        },
+        {
+          "remotePath": "/work/projects/llm-clang",
+          "label": "hydra-dev"
+        },
+        {
+          "remotePath": "/work/projects/obsidian-vault",
+          "label": "Obsidian Vault"
+        },
+        {
+          "remotePath": "/work/projects/personal-website",
+          "label": "personal-website"
+        },
+        {
+          "remotePath": "/work/projects/resume",
+          "label": "resume"
+        }
+      ]
+    },
+    {
+      "sshAlias": "vm-typhon",
+      "projects": [
+        {
+          "remotePath": "/home/islam/hydra-dev",
+          "label": "hydra-dev"
+        }
+      ]
+    }
+  ]
+}

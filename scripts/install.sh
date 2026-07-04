@@ -67,6 +67,9 @@ nix run home-manager/master -- switch --flake ".#${CONFIG_NAME}" -b backup
 
 echo "✅ Home Manager activated!"
 
+echo "🤖 Syncing Codex config and personal skills..."
+bash "$SCRIPT_DIR/scripts/sync-codex.sh" --profile auto --write-config || echo "⚠️  Codex sync failed; continuing dotfiles install."
+
 # Auto-install tmux plugins
 echo "🔌 Installing tmux plugins..."
 if [ -d "$HOME/.tmux/plugins/tpm" ]; then

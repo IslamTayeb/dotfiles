@@ -23,4 +23,7 @@ CONFIG_NAME="${USERNAME}@${HOSTNAME}"
 echo "Rebuilding configuration..."
 nix run home-manager/master -- switch --flake ".#${CONFIG_NAME}" -b backup
 
+echo "Syncing Codex config and personal skills..."
+bash "$SCRIPT_DIR/scripts/sync-codex.sh" --profile auto --write-config || echo "Codex sync failed; update otherwise completed."
+
 echo "Update complete!"

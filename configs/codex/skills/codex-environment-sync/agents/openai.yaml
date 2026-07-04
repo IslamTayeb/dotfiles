@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Environment Sync"
+  short_description: "Sync Codex config, skills, and projects"
+  default_prompt: "Use $codex-environment-sync to sync my Codex configs and skills across this machine, resembool, and vm-typhon."

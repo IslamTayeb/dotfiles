@@ -68,9 +68,22 @@ git pull
 - Neovim: `configs/nvim/`
 - Tmux: `configs/tmux/`
 - OpenCode: `configs/opencode/`
+- Codex profiles and personal skills: `configs/codex/`
 - Other app configs: `configs/<app>/`
 
 Home Manager symlinks managed configs into your home directory.
+
+## Codex sync
+
+Dotfiles installs portable Codex state with:
+
+```bash
+./scripts/sync-codex.sh --profile auto --write-config
+```
+
+This syncs personal skills and a host-specific `~/.codex/config.toml`, backing up the previous config first. It does not sync Codex auth, sessions, logs, caches, state databases, or app-server sockets.
+
+Profiles currently include `macos`, `resembool`, `vm-typhon`, and generic `linux`.
 
 ## Recover
 

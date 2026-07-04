@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obsidian Research Capture"
+  short_description: "Save ideas as linked project notes."
+  default_prompt: "Use $obsidian-research-capture to save this as a concise linked project note, asking one clarifying question first if the idea or desired depth is unclear."

@@ -1,0 +1,245 @@
+model = "gpt-5.5"
+model_reasoning_effort = "xhigh"
+plan_mode_reasoning_effort = "xhigh"
+
+notify = ["/Users/islamtayeb/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+
+service_tier = "default"
+personality = "pragmatic"
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+
+[marketplaces.openai-bundled]
+last_updated = "2026-07-04T08:19:30Z"
+source_type = "local"
+source = "/Users/islamtayeb/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.claude-plugins-official]
+last_updated = "2026-07-04T01:19:39Z"
+last_revision = "8326199c6ec61fdcece33199b61bdaa4f9ae1570"
+source_type = "git"
+source = "https://github.com/anthropics/claude-plugins-official.git"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-07-01T06:39:51Z"
+source_type = "local"
+source = "/Users/islamtayeb/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[mcp_servers.mcp-obsidian]
+args = [
+    "-y",
+    "@smithery/cli@latest",
+    "run",
+    "mcp-obsidian",
+]
+command = "npx"
+
+[mcp_servers.node_repl]
+args = []
+command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/islamtayeb/.codex"
+CODEX_HOME = "/Users/islamtayeb/.codex"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "60e4902788f207f88fd09344dfeafe07769488bdb2924bbb12b322c3b9d2b999"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.623.101652"
+CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
+
+[notice.model_migrations]
+"gpt-5.3-codex" = "gpt-5.4"
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[plugins."frontend-design@claude-plugins-official"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[plugins."latex@openai-bundled"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[projects."/Users/islamtayeb/Documents/GitHub/CS685/HW4"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/CS685/HW5"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/clawd-bot-setup"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/comfy-ui"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/compilers"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/etchr"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/obsidian-granular-repo"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/osu-gpt"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/parameter-golf"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/personal-website"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Obsidian Vault"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/alexis-neurips"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/sketchybar-app-font"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/llm-clang"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/mem-mould"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-05-30/can-you-look-at-all-my"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/decant"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/resume"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-05-31/i-want-to-update-this-i"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-03/can-i-add-skills-adn-workflows"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-09/obsidian-research-capture-users-islamtayeb-codex"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-09/add-me-a-command-in-my"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-09/with-that-said-since-we-re"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-15/https-www-apmoverflow-xyz-on-agent"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/alembic-dev"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-20/what-are-projects-that-i-ve"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-20/i-currently-have-a-color-palette"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-22/do-you-know-what-s-in"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-28/i"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-28/new-chat"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-28/new-chat-2"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/Mapperatorinator"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-06-29/channel-as-you-know-we-are"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/GitHub/extensions"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-07-03/i-really-like-using-the-codex"]
+trust_level = "trusted"
+
+[projects."/Users/islamtayeb/Documents/Codex/2026-07-03/i-really-like-using-the-codex-2"]
+trust_level = "trusted"
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+
+[desktop]
+ambient-suggestions-enabled = false
+conversationDetailMode = "STEPS_COMMANDS"
+show-context-window-usage = true
+keepRemoteControlAwakeWhilePluggedIn = true
+usePointerCursors = true
+appearanceDiffMarkerStyle = "color"
+default-service-tier = "priority"
+preventSleepWhileRunning = true
+followUpQueueMode = "queue"
+useFontSmoothing = true
+
+[desktop.open-in-target-preferences]
+global = "ghostty"
+
+[desktop.open-in-target-preferences.perPath]
+"/Users/islamtayeb/Documents/GitHub/decant" = "ghostty"
+
+[desktop.appearanceDarkChromeTheme]
+accent = "#339cff"
+contrast = 90
+ink = "#ffffff"
+opaqueWindows = true
+surface = "#181818"
+
+[desktop.appearanceDarkChromeTheme.fonts]
+
+[desktop.appearanceDarkChromeTheme.semanticColors]
+diffAdded = "#40c977"
+diffRemoved = "#fa423e"
+skill = "#ad7bf9"
+
+[features]
+js_repl = false
+memories = true
+chronicle = false
+
+[memories]
+generate_memories = true
+use_memories = true
