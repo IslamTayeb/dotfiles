@@ -4,7 +4,6 @@ plan_mode_reasoning_effort = "xhigh"
 
 notify = ["/Users/islamtayeb/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
 
-service_tier = "default"
 personality = "pragmatic"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
