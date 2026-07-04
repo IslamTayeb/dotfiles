@@ -202,6 +202,13 @@ function reload() {
 # Load any local customizations
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
 
+# Auto-attach human SSH sessions to tmux without breaking Codex remote commands.
+if [[ -o interactive && "$OSTYPE" == linux* && -n "$SSH_TTY" && -z "$TMUX" && "${CODEX_AUTO_TMUX:-1}" != "0" && "$TERM" != "dumb" ]]; then
+  if command -v tmux >/dev/null 2>&1; then
+    exec tmux new-session -A -s "${CODEX_TMUX_SESSION:-main}"
+  fi
+fi
+
 # Initialize pyenv
 if command -v pyenv >/dev/null 2>&1; then
   eval "$(pyenv init --path)"
