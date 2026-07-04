@@ -59,6 +59,14 @@ ssh resembool 'sqlite3 -header -column ~/.codex/state_5.sqlite "select archived,
 
 Archive only the moved project's old `resembool` threads, and move their rollout files from `~/.codex/sessions` to `~/.codex/archived_sessions` so `codex doctor --summary` still reports matching state.
 
+After the target host has a verified copy, move the old project directory out of `/work/projects` instead of deleting it:
+
+```bash
+ssh resembool 'archive="/work/archived-projects/project-moved-$(date +%Y%m%d%H%M%S)"; mkdir -p "$archive"; mv /work/projects/<name> "$archive"/'
+```
+
+Leave `resembool:/work/projects` containing only the active general devbox projects.
+
 ## Current Host Intent
 
 - Mac: full desktop config plus personal skills and Codex app remote-project config.
