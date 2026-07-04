@@ -213,7 +213,7 @@ if [[ -o interactive && "$OSTYPE" == linux* && -t 0 && -t 1 && -n "$SSH_TTY" && 
   fi
 
   if [[ "$_codex_tmux_command_shell" != "1" ]] && command -v tmux >/dev/null 2>&1; then
-    exec tmux new-session -A -s "${CODEX_TMUX_SESSION:-main}"
+    command tmux new-session -A -s "${CODEX_TMUX_SESSION:-main}"
   fi
 
   unset _codex_tmux_command_shell _codex_tmux_cmdline
