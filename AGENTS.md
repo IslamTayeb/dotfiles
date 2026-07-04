@@ -1,3 +1,4 @@
 - Keep SSH host aliases Codex-safe: do not use `RemoteCommand` for auto-tmux because Codex app remote command execution fails when OpenSSH has both a command-line command and a configured remote command.
 - Put tmux auto-attach in interactive shell startup instead, guarded by allocated SSH TTY, real stdin/stdout terminals, openable `/dev/tty`, `-z "$TMUX"`, a command-shell check for `zsh -c`/`zsh -ic`, and an opt-out such as `CODEX_AUTO_TMUX=0`.
 - Do not use `exec tmux` in shell startup; let tmux failure fall back to the normal shell instead of closing SSH.
+- Install Ghostty terminfo from `configs/terminfo/xterm-ghostty.terminfo`; tmux auto-attach should temporarily fall back to `TERM=xterm-256color` if Ghostty terminfo is missing.

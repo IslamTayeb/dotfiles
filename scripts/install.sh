@@ -67,6 +67,18 @@ nix run home-manager/master -- switch --flake ".#${CONFIG_NAME}" -b backup
 
 echo "✅ Home Manager activated!"
 
+echo "🖥️  Installing terminal definitions..."
+if [ -f "$SCRIPT_DIR/configs/terminfo/xterm-ghostty.terminfo" ]; then
+  if command -v tic >/dev/null 2>&1; then
+    mkdir -p "$HOME/.terminfo"
+    if ! tic -x -o "$HOME/.terminfo" "$SCRIPT_DIR/configs/terminfo/xterm-ghostty.terminfo"; then
+      echo "⚠️  Could not compile Ghostty terminfo; continuing dotfiles install."
+    fi
+  else
+    echo "⚠️  tic is not available; skipping Ghostty terminfo install."
+  fi
+fi
+
 echo "🤖 Syncing Codex config and personal skills..."
 bash "$SCRIPT_DIR/scripts/sync-codex.sh" --profile auto --write-config || echo "⚠️  Codex sync failed; continuing dotfiles install."
 
