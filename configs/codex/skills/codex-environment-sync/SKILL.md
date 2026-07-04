@@ -1,6 +1,6 @@
 ---
 name: codex-environment-sync
-description: Sync Islam's Codex environment across Mac, resembool, vm-typhon, and future devboxes using the dotfiles repo. Use when adding Codex projects, moving chats/threads between hosts, installing personal skills, updating Codex config.toml profiles, refreshing remote Codex app project config, or debugging missing Codex skills/connections on a machine.
+description: Sync Islam's Codex environment across Mac, resembool, vm-typhon, and future remote hosts using the dotfiles repo. Use when adding Codex projects, moving chats/threads between hosts, installing personal skills, updating Codex config.toml profiles, refreshing remote Codex app project config, or debugging missing Codex skills/connections on a machine.
 metadata:
   short-description: Sync Codex config, skills, and projects
 ---
@@ -49,7 +49,7 @@ When moving a project off `resembool`, update all three layers:
 
 1. Remove the project from `configs/codex/codex-app/config.json` and `configs/codex/profiles/resembool.toml`.
 2. Add it to the target host profile and Mac app config, usually `vm-typhon` for Typhon/Hydra projects.
-3. On the Mac, run `scripts/sync-codex.sh --profile macos`. The script reconciles `~/.codex/.codex-global-state.json` so stale saved remote projects such as old `codex-devbox` or removed `resembool` paths do not keep appearing in the app.
+3. On the Mac, run `scripts/sync-codex.sh --profile macos`. The script reconciles `~/.codex/.codex-global-state.json` so stale saved remote projects from removed host aliases or removed `resembool` paths do not keep appearing in the app.
 
 If the project still appears after the Mac app config is reconciled, check for active remote threads on `resembool`:
 
@@ -65,7 +65,7 @@ After the target host has a verified copy, move the old project directory out of
 ssh resembool 'archive="/work/archived-projects/project-moved-$(date +%Y%m%d%H%M%S)"; mkdir -p "$archive"; mv /work/projects/<name> "$archive"/'
 ```
 
-Leave `resembool:/work/projects` containing only the active general devbox projects.
+Leave `resembool:/work/projects` containing only the active general-purpose projects.
 
 ## Current Host Intent
 

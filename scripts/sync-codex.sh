@@ -113,7 +113,6 @@ const configPath = process.env.CODEX_APP_CONFIG;
 const statePath = process.env.CODEX_GLOBAL_STATE;
 const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
 const state = JSON.parse(fs.readFileSync(statePath, "utf8"));
-const legacyHostIds = new Set(["remote-ssh-discovered:codex-devbox"]);
 
 const desired = [];
 for (const connection of config.remoteConnections ?? []) {
@@ -148,20 +147,11 @@ const reconciled = desired.map((project) => {
   };
 });
 
-const kept = existing.filter(
-  (project) =>
-    !managedHostIds.has(project.hostId) && !legacyHostIds.has(project.hostId),
-);
-const removedIds = new Set(
-  existing
-    .filter(
-      (project) =>
-        (managedHostIds.has(project.hostId) || legacyHostIds.has(project.hostId)) &&
-        !reconciled.some((next) => next.id === project.id),
-    )
-    .map((project) => project.id),
-);
-state["remote-projects"] = [...reconciled, ...kept];
+const removedIds = new Set(existing.map((project) => project.id));
+for (const project of reconciled) {
+  removedIds.delete(project.id);
+}
+state["remote-projects"] = reconciled;
 
 const managedIds = new Set(reconciled.map((project) => project.id));
 const existingOrder = Array.isArray(state["project-order"])
@@ -175,24 +165,45 @@ state["project-order"] = [
 ];
 
 if (state["remote-connection-auto-connect-by-host-id"]) {
-  for (const hostId of legacyHostIds) {
-    delete state["remote-connection-auto-connect-by-host-id"][hostId];
+  for (const [hostId, enabled] of Object.entries(state["remote-connection-auto-connect-by-host-id"])) {
+    if (enabled === true && !managedHostIds.has(hostId)) {
+      delete state["remote-connection-auto-connect-by-host-id"][hostId];
+    }
   }
   for (const hostId of managedHostIds) {
     state["remote-connection-auto-connect-by-host-id"][hostId] = true;
   }
 }
 
+if (Array.isArray(state["codex-managed-remote-connections"])) {
+  state["codex-managed-remote-connections"] = state["codex-managed-remote-connections"].filter(
+    (connection) => {
+      if (managedHostIds.has(connection.hostId)) {
+        return true;
+      }
+      const autoConnect = state["remote-connection-auto-connect-by-host-id"]?.[connection.hostId];
+      return autoConnect !== true;
+    },
+  );
+}
+
 if (state["remote-connection-analytics-id-by-host-id"]) {
-  for (const hostId of legacyHostIds) {
-    delete state["remote-connection-analytics-id-by-host-id"][hostId];
+  const knownConnectionHostIds = new Set(
+    (state["codex-managed-remote-connections"] ?? [])
+      .map((connection) => connection.hostId)
+      .filter(Boolean),
+  );
+  for (const hostId of Object.keys(state["remote-connection-analytics-id-by-host-id"])) {
+    if (!managedHostIds.has(hostId) && !knownConnectionHostIds.has(hostId)) {
+      delete state["remote-connection-analytics-id-by-host-id"][hostId];
+    }
   }
 }
 
 if (Array.isArray(state["host-id-remote-control-allowed"])) {
   const allowed = new Set(
     state["host-id-remote-control-allowed"].filter(
-      (hostId) => !legacyHostIds.has(hostId),
+      (hostId) => managedHostIds.has(hostId),
     ),
   );
   for (const hostId of managedHostIds) {
