@@ -36,11 +36,28 @@ Do not sync secrets or transient state:
 3. Install from dotfiles:
    - Skills only: `scripts/sync-codex.sh --skills-only`
    - Full host profile: `scripts/sync-codex.sh --profile auto --write-config`
+   - Mac app project refresh: `scripts/sync-codex.sh --profile macos`, then reopen or refresh the Codex app.
 4. For remote hosts, copy/pull dotfiles first, then run the sync script on that host.
 5. Validate:
    - `codex doctor --summary`
    - `codex remote-control start --json` when the host should be phone/app reachable.
    - `codex_app.list_projects` from the Mac app when remote project visibility matters.
+
+## Resembool Migration Cleanup
+
+When moving a project off `resembool`, update all three layers:
+
+1. Remove the project from `configs/codex/codex-app/config.json` and `configs/codex/profiles/resembool.toml`.
+2. Add it to the target host profile and Mac app config, usually `vm-typhon` for Typhon/Hydra projects.
+3. On the Mac, run `scripts/sync-codex.sh --profile macos`. The script reconciles `~/.codex/.codex-global-state.json` so stale saved remote projects such as old `codex-devbox` or removed `resembool` paths do not keep appearing in the app.
+
+If the project still appears after the Mac app config is reconciled, check for active remote threads on `resembool`:
+
+```bash
+ssh resembool 'sqlite3 -header -column ~/.codex/state_5.sqlite "select archived,cwd,count(*) n,max(datetime(updated_at, '\''unixepoch'\'')) latest from threads group by archived,cwd order by cwd,archived;"'
+```
+
+Archive only the moved project's old `resembool` threads, and move their rollout files from `~/.codex/sessions` to `~/.codex/archived_sessions` so `codex doctor --summary` still reports matching state.
 
 ## Current Host Intent
 
