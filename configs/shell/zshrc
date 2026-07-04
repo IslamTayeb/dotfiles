@@ -200,7 +200,7 @@ function reload() {
 # command SSH remains untouched for Codex, scripts, scp, rsync, and git.
 function ssh {
   if [[ "$#" -eq 1 && -t 0 && -t 1 && ( "$1" == "typhon" || "$1" == "resembool" ) ]]; then
-    command ssh -t "$1" 'tmux new-session -A -s main'
+    command ssh -tt "$1" 'case "$TERM" in ""|dumb|ghostty|xterm-ghostty) export TERM=xterm-256color ;; esac; exec tmux new-session -A -s main'
   else
     command ssh "$@"
   fi
