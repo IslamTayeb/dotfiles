@@ -1,2 +1,2 @@
 - Keep SSH host aliases Codex-safe: do not use `RemoteCommand` for auto-tmux because Codex app remote command execution fails when OpenSSH has both a command-line command and a configured remote command.
-- Put tmux auto-attach in interactive shell startup instead, guarded by an allocated TTY, `-z "$TMUX"`, and an opt-out such as `CODEX_AUTO_TMUX=0`.
+- Put tmux auto-attach in interactive shell startup instead, guarded by an allocated TTY, `-z "$TMUX"`, a command-shell check for `zsh -c`/`zsh -ic`, and an opt-out such as `CODEX_AUTO_TMUX=0`.
