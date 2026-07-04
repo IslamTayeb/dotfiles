@@ -203,7 +203,7 @@ function reload() {
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
 
 # Auto-attach human SSH sessions to tmux without breaking Codex remote commands.
-if [[ -o interactive && "$OSTYPE" == linux* && -n "$SSH_TTY" && -z "$TMUX" && "${CODEX_AUTO_TMUX:-1}" != "0" && "$TERM" != "dumb" ]]; then
+if [[ -o interactive && "$OSTYPE" == linux* && -n "$SSH_TTY" && -z "$TMUX" && -z "${ZSH_EXECUTION_STRING:-}" && "${CODEX_AUTO_TMUX:-1}" != "0" && "$TERM" != "dumb" ]]; then
   if command -v tmux >/dev/null 2>&1; then
     exec tmux new-session -A -s "${CODEX_TMUX_SESSION:-main}"
   fi
