@@ -1,6 +1,6 @@
 ---
 name: codex-environment-sync
-description: Sync Islam's Codex environment across Mac, resembool, vm-typhon, and future remote hosts using the dotfiles repo. Use when adding Codex projects, moving chats/threads between hosts, installing personal skills, updating Codex config.toml profiles, refreshing remote Codex app project config, or debugging missing Codex skills/connections on a machine.
+description: Sync Islam's Codex environment across Mac, resembool, typhon, and future remote hosts using the dotfiles repo. Use when adding Codex projects, moving chats/threads between hosts, installing personal skills, updating Codex config.toml profiles, refreshing remote Codex app project config, or debugging missing Codex skills/connections on a machine.
 metadata:
   short-description: Sync Codex config, skills, and projects
 ---
@@ -48,7 +48,7 @@ Do not sync secrets or transient state:
 When moving a project off `resembool`, update all three layers:
 
 1. Remove the project from `configs/codex/codex-app/config.json` and `configs/codex/profiles/resembool.toml`.
-2. Add it to the target host profile and Mac app config, usually `vm-typhon` for Typhon/Hydra projects.
+2. Add it to the target host profile and Mac app config, usually `typhon` for Typhon/Hydra projects.
 3. On the Mac, run `scripts/sync-codex.sh --profile macos`. The script reconciles `~/.codex/.codex-global-state.json` so stale saved remote projects from removed host aliases or removed `resembool` paths do not keep appearing in the app.
 
 If the project still appears after the Mac app config is reconciled, check for active remote threads on `resembool`:
@@ -71,7 +71,7 @@ Leave `resembool:/work/projects` containing only the active general-purpose proj
 
 - Mac: full desktop config plus personal skills and Codex app remote-project config.
 - `resembool`: general always-on Codex host. Projects under `/work/projects`, including Mapperatorinator, alembic-dev, personal-website, obsidian-vault, and resume. Do not use it for Typhon/Hydra dev.
-- `vm-typhon`: Typhon/Hydra-focused host. Keep `hydra-dev` under `/home/islam/hydra-dev` and Typhon under `/home/islam/typhon`, and install the same personal skills and base Codex config.
+- `typhon`: Typhon/Hydra-focused host. Keep `hydra-dev` under `/home/islam/hydra-dev` and Typhon under `/home/islam/typhon`, and install the same personal skills and base Codex config.
 
 ## Common Failure Modes
 

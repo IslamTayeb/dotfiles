@@ -9,7 +9,7 @@ INSTALL_APP_CONFIG=true
 
 usage() {
   cat <<'EOF'
-Usage: scripts/sync-codex.sh [--profile auto|macos|resembool|vm-typhon] [--write-config] [--skills-only]
+Usage: scripts/sync-codex.sh [--profile auto|macos|resembool|typhon] [--write-config] [--skills-only]
 
 Installs portable Codex state from dotfiles:
 - personal skills from configs/codex/skills
@@ -53,7 +53,7 @@ detect_profile() {
   os="$(uname -s)"
   case "$host" in
     resembool) echo "resembool"; return ;;
-    typhon|vm-typhon) echo "vm-typhon"; return ;;
+    typhon) echo "typhon"; return ;;
   esac
   case "$os" in
     Darwin) echo "macos" ;;
@@ -114,6 +114,28 @@ const statePath = process.env.CODEX_GLOBAL_STATE;
 const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
 const state = JSON.parse(fs.readFileSync(statePath, "utf8"));
 
+const previousConnections = Array.isArray(state["codex-managed-remote-connections"])
+  ? state["codex-managed-remote-connections"]
+  : [];
+const previousConnectionByHostId = new Map(
+  previousConnections.map((connection) => [connection.hostId, connection]),
+);
+
+const desiredConnections = (config.remoteConnections ?? []).map((connection) => {
+  const hostId = `remote-ssh-discovered:${connection.sshAlias}`;
+  const previous = previousConnectionByHostId.get(hostId);
+  return {
+    hostId,
+    displayName: connection.sshAlias,
+    source: "discovered",
+    alias: connection.sshAlias,
+    hostname: null,
+    sshPort: null,
+    identity: null,
+    connectionAnalyticsId: previous?.connectionAnalyticsId ?? crypto.randomUUID(),
+  };
+});
+
 const desired = [];
 for (const connection of config.remoteConnections ?? []) {
   const hostId = `remote-ssh-discovered:${connection.sshAlias}`;
@@ -127,6 +149,9 @@ for (const connection of config.remoteConnections ?? []) {
 }
 
 const managedHostIds = new Set(desired.map((project) => project.hostId));
+for (const connection of desiredConnections) {
+  managedHostIds.add(connection.hostId);
+}
 const existing = Array.isArray(state["remote-projects"])
   ? state["remote-projects"]
   : [];
@@ -175,28 +200,13 @@ if (state["remote-connection-auto-connect-by-host-id"]) {
   }
 }
 
-if (Array.isArray(state["codex-managed-remote-connections"])) {
-  state["codex-managed-remote-connections"] = state["codex-managed-remote-connections"].filter(
-    (connection) => {
-      if (managedHostIds.has(connection.hostId)) {
-        return true;
-      }
-      const autoConnect = state["remote-connection-auto-connect-by-host-id"]?.[connection.hostId];
-      return autoConnect !== true;
-    },
-  );
-}
+state["codex-managed-remote-connections"] = desiredConnections;
 
 if (state["remote-connection-analytics-id-by-host-id"]) {
-  const knownConnectionHostIds = new Set(
-    (state["codex-managed-remote-connections"] ?? [])
-      .map((connection) => connection.hostId)
-      .filter(Boolean),
-  );
-  for (const hostId of Object.keys(state["remote-connection-analytics-id-by-host-id"])) {
-    if (!managedHostIds.has(hostId) && !knownConnectionHostIds.has(hostId)) {
-      delete state["remote-connection-analytics-id-by-host-id"][hostId];
-    }
+  state["remote-connection-analytics-id-by-host-id"] = {};
+  for (const connection of desiredConnections) {
+    state["remote-connection-analytics-id-by-host-id"][connection.hostId] =
+      connection.connectionAnalyticsId;
   }
 }
 
@@ -210,6 +220,19 @@ if (Array.isArray(state["host-id-remote-control-allowed"])) {
     allowed.add(hostId);
   }
   state["host-id-remote-control-allowed"] = [...allowed];
+}
+
+const atomState = state["electron-persisted-atom-state"];
+if (atomState && typeof atomState === "object") {
+  for (const key of ["agent-mode-by-host-id", "remote-host-globe-color-by-host-id"]) {
+    if (atomState[key] && typeof atomState[key] === "object") {
+      for (const hostId of Object.keys(atomState[key])) {
+        if (hostId.startsWith("remote-ssh-discovered:") && !managedHostIds.has(hostId)) {
+          delete atomState[key][hostId];
+        }
+      }
+    }
+  }
 }
 
 fs.writeFileSync(statePath, `${JSON.stringify(state)}\n`);

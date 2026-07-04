@@ -83,7 +83,7 @@ Dotfiles installs portable Codex state with:
 
 This syncs personal skills and a host-specific `~/.codex/config.toml`, backing up the previous config first. It does not sync Codex auth, sessions, logs, caches, state databases, or app-server sockets.
 
-Profiles currently include `macos`, `resembool`, `vm-typhon`, and generic `linux`.
+Profiles currently include `macos`, `resembool`, `typhon`, and generic `linux`.
 
 ## Recover
 

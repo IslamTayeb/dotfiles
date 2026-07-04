@@ -29,7 +29,7 @@
             ]
         },
         {
-            "sshAlias": "vm-typhon",
+            "sshAlias": "typhon",
             "projects": [
                 {
                     "remotePath": "/home/islam/hydra-dev",
