@@ -75,6 +75,6 @@ Leave `resembool:/work/projects` containing only the active general-purpose proj
 
 ## Common Failure Modes
 
-- If Codex app SSH says it cannot execute a command-line and remote command, remove `RemoteCommand` from `~/.ssh/config`. Put tmux auto-attach in remote interactive shell startup instead.
+- If Codex app SSH says it cannot execute a command-line and remote command, remove `RemoteCommand` from `~/.ssh/config`. Bare human `ssh typhon`/`ssh resembool` tmux attach should be handled by the local interactive zsh wrapper; remote-side tmux auto-attach is opt-in only with `CODEX_REMOTE_AUTO_TMUX=1`.
 - If a remote project has no chats, verify the remote daemon's `threads.cwd` matches the saved remote project path exactly.
 - If a host has only `.system` skills, run the sync script from dotfiles and restart Codex.

@@ -196,14 +196,25 @@ function reload() {
   exec zsh
 }
 
+# Human shorthand: bare `ssh typhon`/`ssh resembool` attaches tmux, while
+# command SSH remains untouched for Codex, scripts, scp, rsync, and git.
+function ssh {
+  if [[ "$#" -eq 1 && -t 0 && -t 1 && ( "$1" == "typhon" || "$1" == "resembool" ) ]]; then
+    command ssh -t "$1" 'tmux new-session -A -s main'
+  else
+    command ssh "$@"
+  fi
+}
+
 # Load Powerlevel10k config
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Load any local customizations
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
 
-# Auto-attach human SSH sessions to tmux without breaking Codex remote commands.
-if [[ -o interactive && "$OSTYPE" == linux* && -t 0 && -t 1 && -n "$SSH_TTY" && -z "$TMUX" && "${CODEX_AUTO_TMUX:-1}" != "0" && "$TERM" != "dumb" ]] && { : </dev/tty >/dev/tty; } 2>/dev/null; then
+# Optional remote-side tmux attach. Default off because Codex and OpenSSH
+# command paths are safer when tmux attach is initiated from the local shell.
+if [[ "${CODEX_REMOTE_AUTO_TMUX:-0}" == "1" && -o interactive && "$OSTYPE" == linux* && -t 0 && -t 1 && -n "$SSH_TTY" && -z "$TMUX" && "${CODEX_AUTO_TMUX:-1}" != "0" && "$TERM" != "dumb" ]] && { : </dev/tty >/dev/tty; } 2>/dev/null; then
   _codex_tmux_command_shell=0
   if [[ -r "/proc/$$/cmdline" ]]; then
     _codex_tmux_cmdline="$(tr '\0' ' ' <"/proc/$$/cmdline")"
