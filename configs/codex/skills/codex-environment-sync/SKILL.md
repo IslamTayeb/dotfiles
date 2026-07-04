@@ -45,8 +45,8 @@ Do not sync secrets or transient state:
 ## Current Host Intent
 
 - Mac: full desktop config plus personal skills and Codex app remote-project config.
-- `resembool`: general always-on Codex host. Projects under `/work/projects`, including Mapperatorinator, alembic-dev, typhon, llm-clang/hydra-dev, personal-website, obsidian-vault, and resume.
-- `vm-typhon`: Typhon/hydra-focused host. Keep `hydra-dev` under `/home/islam/hydra-dev`, but still install the same personal skills and base Codex config.
+- `resembool`: general always-on Codex host. Projects under `/work/projects`, including Mapperatorinator, alembic-dev, personal-website, obsidian-vault, and resume. Do not use it for Typhon/Hydra dev.
+- `vm-typhon`: Typhon/Hydra-focused host. Keep `hydra-dev` under `/home/islam/hydra-dev` and Typhon under `/home/islam/typhon`, and install the same personal skills and base Codex config.
 
 ## Common Failure Modes
 
