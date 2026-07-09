@@ -3,3 +3,4 @@
 - Remote-side tmux auto-attach is opt-in only via `CODEX_REMOTE_AUTO_TMUX=1`, guarded by allocated SSH TTY, real stdin/stdout terminals, openable `/dev/tty`, `-z "$TMUX"`, a command-shell check for `zsh -c`/`zsh -ic`, and an opt-out such as `CODEX_AUTO_TMUX=0`.
 - Do not use `exec tmux` in shell startup; let tmux failure fall back to the normal shell instead of closing SSH.
 - Install Ghostty terminfo from `configs/terminfo/xterm-ghostty.terminfo`; tmux auto-attach should temporarily fall back to `TERM=xterm-256color` if Ghostty terminfo is missing.
+- Use the `migrate-project-to-resembool` skill for full project moves to resembool; `codex-environment-sync` is only for Codex config, skills, profiles, and app project metadata.

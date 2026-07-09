@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project to Resembool"
+  short_description: "Move project files and Codex chats to resembool"
+  default_prompt: "Use $migrate-project-to-resembool to migrate this project and its Codex chats to resembool, then set up the remote environment and smoke test it."

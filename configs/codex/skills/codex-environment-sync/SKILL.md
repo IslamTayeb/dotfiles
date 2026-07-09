@@ -16,6 +16,7 @@ Use this skill when the task is about keeping Islam's Codex setup consistent acr
 - Personal skills live in `configs/codex/skills/`.
 - Host config profiles live in `configs/codex/profiles/`.
 - Mac Codex app remote-project config lives in `configs/codex/codex-app/config.json`.
+- Full project/worktree data migration to `resembool`, including rsync and Codex chat/goal transfer, belongs to `$migrate-project-to-resembool`, not this config-sync skill.
 
 Do not sync secrets or transient state:
 
