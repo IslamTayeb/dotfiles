@@ -14,6 +14,7 @@ Usage: scripts/sync-codex.sh [--profile auto|macos|resembool|typhon] [--write-co
 Installs portable Codex state from dotfiles:
 - personal skills from configs/codex/skills
 - optional host profile from configs/codex/profiles/<profile>.toml
+- named profile overlays from configs/codex/profile-overlays/*.config.toml
 - macOS Codex app remote-project config from configs/codex/codex-app/config.json
 
 Never syncs auth.json, logs, sessions, caches, or state databases.
@@ -91,6 +92,17 @@ if [ "$WRITE_CONFIG" = true ]; then
     cp "$CODEX_HOME/config.toml" "$CODEX_HOME/config.toml.backup.$(date +%Y%m%d%H%M%S)"
   fi
   cp "$profile_path" "$CODEX_HOME/config.toml"
+
+  if [ -d "$SCRIPT_DIR/configs/codex/profile-overlays" ]; then
+    for overlay_path in "$SCRIPT_DIR"/configs/codex/profile-overlays/*.config.toml; do
+      [ -f "$overlay_path" ] || continue
+      overlay_name="$(basename "$overlay_path")"
+      if [ -f "$CODEX_HOME/$overlay_name" ]; then
+        cp "$CODEX_HOME/$overlay_name" "$CODEX_HOME/$overlay_name.backup.$(date +%Y%m%d%H%M%S)"
+      fi
+      cp "$overlay_path" "$CODEX_HOME/$overlay_name"
+    done
+  fi
 fi
 
 if [ "$INSTALL_APP_CONFIG" = true ] && [ "$(uname -s)" = "Darwin" ] && [ -f "$SCRIPT_DIR/configs/codex/codex-app/config.json" ]; then

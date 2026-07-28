@@ -4,3 +4,4 @@
 - Do not use `exec tmux` in shell startup; let tmux failure fall back to the normal shell instead of closing SSH.
 - Install Ghostty terminfo from `configs/terminfo/xterm-ghostty.terminfo`; tmux auto-attach should temporarily fall back to `TERM=xterm-256color` if Ghostty terminfo is missing.
 - Use the `migrate-project-to-resembool` skill for full project moves to resembool; `codex-environment-sync` is only for Codex config, skills, profiles, and app project metadata.
+- Keep Meridian pinned under `~/.local/src/meridian`, bind it only to `127.0.0.1:3456`, and never pass Anthropic API keys or Bedrock overrides into its service environment. Use the `claude-max` Codex profile overlay to select it without replacing the normal OpenAI default.

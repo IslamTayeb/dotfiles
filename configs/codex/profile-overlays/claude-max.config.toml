@@ -1,0 +1,4 @@
+# Select with: codex --profile claude-max
+model = "claude-sonnet-5"
+model_provider = "meridian"
+model_reasoning_effort = "high"

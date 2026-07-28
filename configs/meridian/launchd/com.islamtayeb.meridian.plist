@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.islamtayeb.meridian</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/islamtayeb/.nix-profile/bin/node</string>
+    <string>/Users/islamtayeb/.local/src/meridian/dist/cli.js</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key>
+    <string>/Users/islamtayeb</string>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/Users/islamtayeb/.nix-profile/bin:/Users/islamtayeb/.local/bin</string>
+    <key>MERIDIAN_HOST</key>
+    <string>127.0.0.1</string>
+    <key>MERIDIAN_PORT</key>
+    <string>3456</string>
+    <key>MERIDIAN_1M_CONTEXT_SUPPORT</key>
+    <string>0</string>
+    <key>MERIDIAN_TELEMETRY_PERSIST</key>
+    <string>1</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>StandardOutPath</key>
+  <string>/Users/islamtayeb/.local/state/meridian/stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/islamtayeb/.local/state/meridian/stderr.log</string>
+</dict>
+</plist>

@@ -1,0 +1,21 @@
+[Unit]
+Description=Meridian Claude subscription proxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /home/islam/.local/src/meridian/dist/cli.js
+Environment=HOME=/home/islam
+Environment=PATH=/home/islam/.local/bin:/home/islam/.nix-profile/bin:/usr/local/bin:/usr/bin:/bin
+Environment=MERIDIAN_HOST=127.0.0.1
+Environment=MERIDIAN_PORT=3456
+Environment=MERIDIAN_1M_CONTEXT_SUPPORT=0
+Environment=MERIDIAN_TELEMETRY_PERSIST=1
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

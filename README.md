@@ -85,6 +85,18 @@ This syncs personal skills and a host-specific `~/.codex/config.toml`, backing u
 
 Profiles currently include `macos`, `resembool`, `typhon`, and generic `linux`.
 
+The sync also installs named profile overlays from `configs/codex/profile-overlays/`.
+Use Claude through the localhost-only Meridian service with:
+
+```bash
+codex --profile claude-max
+codex exec --profile claude-max "your task"
+```
+
+The normal OpenAI provider remains the default when `--profile claude-max` is
+omitted. Meridian service definitions live under `configs/meridian/`; they must
+not inherit `ANTHROPIC_API_KEY`, Bedrock settings, or a non-loopback bind address.
+
 ## Recover
 
 Rollback to the previous Home Manager generation:

@@ -2,6 +2,11 @@ model = "gpt-5.5"
 model_reasoning_effort = "xhigh"
 plan_mode_reasoning_effort = "xhigh"
 
+[model_providers.meridian]
+name = "Claude Max via Meridian"
+base_url = "http://127.0.0.1:3456/v1"
+wire_api = "responses"
+
 notify = ["/Users/islamtayeb/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
 
 personality = "pragmatic"
