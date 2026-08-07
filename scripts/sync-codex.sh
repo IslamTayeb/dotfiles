@@ -13,7 +13,6 @@ Usage: scripts/sync-codex.sh [--profile auto|macos|resembool|typhon] [--write-co
 
 Installs portable Codex state from dotfiles:
 - personal skills from configs/codex/skills
-- helper commands from configs/codex/bin
 - optional host profile from configs/codex/profiles/<profile>.toml
 - named profile overlays from configs/codex/profile-overlays/*.config.toml
 - macOS Codex app remote-project config from configs/codex/codex-app/config.json
@@ -79,16 +78,6 @@ if [ -d "$SCRIPT_DIR/configs/codex/skills" ]; then
     rm -rf "$CODEX_HOME/skills/$name"
     mkdir -p "$CODEX_HOME/skills/$name"
     cp -R "$skill_dir"/. "$CODEX_HOME/skills/$name"/
-  done
-fi
-
-if [ -d "$SCRIPT_DIR/configs/codex/bin" ]; then
-  mkdir -p "$HOME/.local/bin"
-  for command_path in "$SCRIPT_DIR"/configs/codex/bin/*; do
-    [ -f "$command_path" ] || continue
-    command_name="$(basename "$command_path")"
-    cp "$command_path" "$HOME/.local/bin/$command_name"
-    chmod 0755 "$HOME/.local/bin/$command_name"
   done
 fi
 
@@ -263,7 +252,7 @@ NODE
   fi
 fi
 
-echo "Synced Codex skills to $CODEX_HOME/skills and helper commands to $HOME/.local/bin"
+echo "Synced Codex skills to $CODEX_HOME/skills"
 if [ "$WRITE_CONFIG" = true ]; then
   echo "Wrote Codex profile: $PROFILE"
 else
