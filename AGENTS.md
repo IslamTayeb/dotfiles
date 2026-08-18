@@ -3,6 +3,9 @@
 - Remote-side tmux auto-attach is opt-in only via `CODEX_REMOTE_AUTO_TMUX=1`, guarded by allocated SSH TTY, real stdin/stdout terminals, openable `/dev/tty`, `-z "$TMUX"`, a command-shell check for `zsh -c`/`zsh -ic`, and an opt-out such as `CODEX_AUTO_TMUX=0`.
 - Do not use `exec tmux` in shell startup; let tmux failure fall back to the normal shell instead of closing SSH.
 - Install Ghostty terminfo from `configs/terminfo/xterm-ghostty.terminfo`; tmux auto-attach should temporarily fall back to `TERM=xterm-256color` if Ghostty terminfo is missing.
+- Ghostty config is `configs/ghostty/config.ghostty`, linked to `~/.config/ghostty/config.ghostty`. On macOS `~/Library/Application Support/com.mitchellh.ghostty/config.ghostty` is searched first, so leave it absent.
+- Do not enable Ghostty's `ssh-env`/`ssh-terminfo` shell-integration features: the `ssh` wrapper in `configs/shell/zshrc` shadows Ghostty's own, and remote terminfo is already handled by `scripts/install.sh`.
+- Leave `ctrl+l` unbound in Ghostty; it is the local tmux prefix. Keep `clipboard-write = allow` so OSC 52 copy from remote tmux keeps working.
 - Use the `migrate-project-to-resembool` skill for full project moves to resembool; `codex-environment-sync` is only for Codex config, skills, profiles, and app project metadata.
 - Keep Codex scalar settings before the first TOML table so they remain top-level values.
 - Keep Codex on the direct OpenAI provider by default. Do not install or configure local model-provider proxies without an explicit request.

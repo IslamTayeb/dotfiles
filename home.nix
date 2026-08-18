@@ -68,6 +68,10 @@ in
     # Tmux
     ".config/tmux/tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/tmux/tmux.conf";
 
+    # Ghostty (config is linked even when the app is not installed yet, so a
+    # later `brew install --cask ghostty` picks it up with no extra steps)
+    ".config/ghostty/config.ghostty".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/ghostty/config.ghostty";
+
     # Development tools
     ".config/nvim" = {
       source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/nvim";

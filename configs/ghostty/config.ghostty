@@ -1,0 +1,58 @@
+# Ghostty configuration — managed by dotfiles.
+# Source: ~/.config/nix-config/configs/ghostty/config.ghostty
+# Symlinked to ~/.config/ghostty/config.ghostty by home.nix.
+#
+# Reference: `ghostty +show-config --default --docs`
+# Themes:    `ghostty +list-themes`
+# Validate:  `ghostty +validate-config`
+
+# ── Theme ─────────────────────────────────────────────────────────────
+# Clean and high contrast, follows the macOS system appearance.
+# (Deliberately not the gruvbox used by nvim/tmux/btop.)
+theme = light:GitHub Light High Contrast,dark:GitHub Dark High Contrast
+
+# Opaque background — contrast beats transparency.
+background-opacity = 1
+
+# macos-titlebar-style is left at the default `transparent`: the `tabs`
+# style has a known upstream bug where it does not repaint when the
+# light/dark theme switches.
+
+# ── Font ──────────────────────────────────────────────────────────────
+# Empty font-family = Ghostty's built-in JetBrains Mono. Powerlevel10k's
+# nerdfont-v3 icons resolve through Ghostty's bundled "Symbols Nerd Font"
+# fallback and powerline separators are drawn by internal sprites, so a
+# fresh machine needs no font installed. Verify with:
+#   ghostty +show-face --string=""
+font-family =
+font-size = 14
+font-thicken = true
+
+# ── Window ────────────────────────────────────────────────────────────
+window-padding-x = 10
+window-padding-y = 8
+window-padding-balance = true
+mouse-hide-while-typing = true
+
+# Make alt/meta work for nvim and tmux bindings instead of typing ¬ø∆.
+macos-option-as-alt = true
+
+# ── Cursor ────────────────────────────────────────────────────────────
+cursor-style = block
+cursor-style-blink = false
+
+# ── Shell integration ─────────────────────────────────────────────────
+shell-integration = detect
+# ssh-env / ssh-terminfo are intentionally left OFF: configs/shell/zshrc
+# defines its own `ssh` wrapper (tmux auto-attach + TERM fallback) which
+# would shadow Ghostty's ssh wrapper anyway. Remote terminfo is handled by
+# scripts/install.sh compiling configs/terminfo/xterm-ghostty.terminfo.
+shell-integration-features = cursor,title,no-sudo,no-ssh-env,no-ssh-terminfo
+
+# ── Keybindings ───────────────────────────────────────────────────────
+# No overrides. Notably ctrl+l is left unbound so it stays available as the
+# local tmux prefix (see configs/tmux/tmux.conf), and cmd+d / cmd+shift+d
+# already split right / down by default.
+#
+# clipboard-write defaults to `allow`, which is what makes OSC 52 copy work
+# from tmux over SSH — do not set it to `ask`.

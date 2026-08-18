@@ -47,6 +47,7 @@
       homeConfigurations = {
         # Your Mac - replace with your actual username
         "islamtayeb@Islams-MacBook-Pro" = mkHomeConfig "aarch64-darwin" "islamtayeb" [ ];
+        "latchbio@latchbios-MacBook-Pro" = mkHomeConfig "aarch64-darwin" "latchbio" [ ];
 
         # Linux server
         "imt11@coltrane" = mkHomeConfig "x86_64-linux" "imt11" [ ];

@@ -60,6 +60,24 @@ git pull
 
 `scripts/update.sh` updates flake inputs, rebuilds Home Manager, and switches to the new generation.
 
+## Ghostty
+
+The terminal config lives at `configs/ghostty/config.ghostty` and Home Manager
+links it to `~/.config/ghostty/config.ghostty`. That is the current filename,
+verified against Ghostty 1.3.1; older releases used plain `config`. On macOS
+Ghostty searches `~/Library/Application Support/com.mitchellh.ghostty/config.ghostty`
+*first*, so keep that path empty or absent or it will shadow the dotfiles config.
+
+The config sets no `font-family`: Ghostty's built-in JetBrains Mono plus its
+bundled `Symbols Nerd Font` fallback already cover the powerlevel10k
+`nerdfont-v3` icons, so a new machine needs no font installed. Check with:
+
+```bash
+ghostty +validate-config
+ghostty +show-config --changes-only
+ghostty +show-face --string=""
+```
+
 ## Edit things
 
 - Packages: `home.packages` in `home.nix`
@@ -67,6 +85,7 @@ git pull
 - Shell: `configs/shell/`
 - Neovim: `configs/nvim/`
 - Tmux: `configs/tmux/`
+- Ghostty: `configs/ghostty/config.ghostty`
 - OpenCode: `configs/opencode/`
 - Codex profiles and personal skills: `configs/codex/`
 - Other app configs: `configs/<app>/`
