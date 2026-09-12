@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export WHITE=0xffc5c9c5
+export GRAY=0xffa6a69c            # dragonGray - inactive spaces, separator
 
 # Kanagawa Dragon color scheme
 export BAR_COLOR=0xff181616      # dragonBlack3 - bar background
@@ -13,7 +14,7 @@ export GREEN=0xff8a9a7b          # dragonGreen2 - battery icon & label
 
 # Legacy compatibility
 export ITEM_BG_COLOR=0xff282727
-export ACCENT_COLOR=0xffc5c9c5
+export ACCENT_COLOR=0xff8ba4b0   # dragonBlue2 - active space, front app, media
 
 # -- Gruvbox (previous) --
 # export BAR_COLOR=0xff282828
