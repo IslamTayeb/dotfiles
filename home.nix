@@ -96,8 +96,8 @@ in
     ".config/opencode/tui.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/tui.json";
     ".config/opencode/themes/gruvbox-transparent.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/themes/gruvbox-transparent.json";
   } // lib.optionalAttrs isMac {
-    # Ghostty (macOS). Single config at XDG path; the Application Support copy is retired.
-    ".config/ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/ghostty/config";
+    # Ghostty per-machine overrides (theme, font size), keyed by username.
+    ".config/ghostty/host.ghostty".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/ghostty/hosts/${config.home.username}.ghostty";
 
     # SketchyBar (macOS)
     ".config/sketchybar" = {

@@ -1,0 +1,9 @@
+# latchbios-MacBook-Pro (work). High-contrast GitHub theme that follows system appearance.
+theme = light:GitHub Light High Contrast,dark:GitHub Dark High Contrast
+background-opacity = 1
+font-size = 14
+window-padding-x = 10
+window-padding-y = 8
+window-padding-balance = true
+cursor-style = block
+cursor-style-blink = false

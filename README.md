@@ -62,11 +62,14 @@ git pull
 
 ## Ghostty
 
-The terminal config lives at `configs/ghostty/config.ghostty` and Home Manager
-links it to `~/.config/ghostty/config.ghostty`. That is the current filename,
-verified against Ghostty 1.3.1; older releases used plain `config`. On macOS
-Ghostty searches `~/Library/Application Support/com.mitchellh.ghostty/config.ghostty`
-*first*, so keep that path empty or absent or it will shadow the dotfiles config.
+The shared terminal config lives at `configs/ghostty/config.ghostty` and Home
+Manager links it to `~/.config/ghostty/config.ghostty`. Per-machine look (theme,
+font size, padding, cursor) lives in `configs/ghostty/hosts/<username>.ghostty`,
+linked to `~/.config/ghostty/host.ghostty` and pulled in by the shared file's
+`config-file = ?host.ghostty` line. Ghostty 1.3.1 still also loads a plain
+`config` file, so do not add one. On macOS Ghostty searches
+`~/Library/Application Support/com.mitchellh.ghostty/config*` *first*, so keep
+that directory free of config files or it will shadow the dotfiles config.
 
 The config sets no `font-family`: Ghostty's built-in JetBrains Mono plus its
 bundled `Symbols Nerd Font` fallback already cover the powerlevel10k
