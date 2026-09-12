@@ -1,8 +1,11 @@
 return {
-  { "ellisonleao/gruvbox.nvim" },
+  {
+    "rebelot/kanagawa.nvim",
+    opts = { theme = "dragon", background = { dark = "dragon" } },
+  },
 
   {
     "LazyVim/LazyVim",
-    opts = { colorscheme = "gruvbox" },
+    opts = { colorscheme = "kanagawa" },
   },
 }

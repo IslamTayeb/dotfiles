@@ -95,6 +95,15 @@ in
     ".config/opencode/package.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/package.json";
     ".config/opencode/tui.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/tui.json";
     ".config/opencode/themes/gruvbox-transparent.json".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/opencode/themes/gruvbox-transparent.json";
+  } // lib.optionalAttrs isMac {
+    # Ghostty (macOS). Single config at XDG path; the Application Support copy is retired.
+    ".config/ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/ghostty/config";
+
+    # SketchyBar (macOS)
+    ".config/sketchybar" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/configs/sketchybar";
+      recursive = true;
+    };
   };
 
   # Install oh-my-zsh and TPM

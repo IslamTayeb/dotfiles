@@ -46,3 +46,7 @@ configs/iterm2/AppSupport/
 configs/iterm2/*.bak
 configs/nvim/lazy-lock.json
 configs/nvim/.git/
+
+# SketchyBar local state
+configs/sketchybar/.claude/
+configs/sketchybar/.backups/
