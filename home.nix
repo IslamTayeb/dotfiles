@@ -31,6 +31,7 @@ in
     zsh
     bun
     neovim
+    tree-sitter # nvim-treesitter main branch compiles parsers with this
     tmux
 
     # LSPs

@@ -1,11 +1,8 @@
 return {
-  {
-    "rebelot/kanagawa.nvim",
-    opts = { theme = "dragon", background = { dark = "dragon" } },
-  },
+  { "rebelot/kanagawa.nvim" },
 
   {
     "LazyVim/LazyVim",
-    opts = { colorscheme = "kanagawa" },
+    opts = { colorscheme = "kanagawa-dragon" },
   },
 }

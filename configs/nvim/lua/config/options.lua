@@ -2,8 +2,8 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
--- Move nvim-tree to the right
-vim.g.nvim_tree_side = "right"
+-- No smooth scroll / animations: they flicker over tmux and ssh
+vim.g.snacks_animate = false
 
 -- Enable text wrapping
 vim.opt.wrap = true
