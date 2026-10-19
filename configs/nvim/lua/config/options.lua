@@ -8,7 +8,6 @@ vim.g.snacks_animate = false
 -- Enable text wrapping
 vim.opt.wrap = true
 vim.opt.linebreak = true -- Break lines at word boundaries
-vim.opt.showbreak = "↪ " -- Optional: show line break indicator
 
 -- Disable netrw (vim's built-in file explorer)
 vim.g.loaded_netrw = 1
